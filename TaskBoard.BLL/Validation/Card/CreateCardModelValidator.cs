@@ -1,12 +1,13 @@
 using FluentValidation;
 using TaskBoard.BLL.Infrastructure;
 using TaskBoard.BLL.Models.Card;
+using TaskBoard.BLL.Validation.Common;
 
-namespace TaskBoard.BLL.Validation;
+namespace TaskBoard.BLL.Validation.Card;
 
-public class UpdateCardModelValidator : AbstractValidator<UpdateCardModel>
+public class CreateCardModelValidator : AbstractValidator<CreateCardModel>
 {
-    public UpdateCardModelValidator(IDateTimeProvider dateTimeProvider)
+    public CreateCardModelValidator(IDateTimeProvider dateTimeProvider)
     {
         RuleFor(c => c.Name)
             .NotNull()

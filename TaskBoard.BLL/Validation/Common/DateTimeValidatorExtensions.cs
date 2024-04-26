@@ -1,7 +1,7 @@
 using FluentValidation;
 using TaskBoard.BLL.Infrastructure;
 
-namespace TaskBoard.BLL.Validation;
+namespace TaskBoard.BLL.Validation.Common;
 
 public static class DateTimeValidatorExtensions
 {

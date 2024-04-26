@@ -1,6 +1,6 @@
 using FluentValidation;
 
-namespace TaskBoard.BLL.Validation;
+namespace TaskBoard.BLL.Validation.Common;
 
 public static class PriorityValidatorExtensions
 {

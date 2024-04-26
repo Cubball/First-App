@@ -1,7 +1,7 @@
 using FluentValidation;
 using TaskBoard.BLL.Models.List;
 
-namespace TaskBoard.BLL.Validation;
+namespace TaskBoard.BLL.Validation.List;
 
 public class UpdateListModelValidator : AbstractValidator<UpdateListModel>
 {
