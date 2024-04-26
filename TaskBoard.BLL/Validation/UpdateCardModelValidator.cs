@@ -16,7 +16,8 @@ public class UpdateCardModelValidator : AbstractValidator<UpdateCardModel>
             .NotNull()
             .MaximumLength(1000);
         RuleFor(c => c.DueDate)
-            .InTheFuture(dateTimeProvider);
+            .InTheFuture(dateTimeProvider)
+            .UtcKind();
         RuleFor(c => c.Priority)
             .ValidPriority();
     }
