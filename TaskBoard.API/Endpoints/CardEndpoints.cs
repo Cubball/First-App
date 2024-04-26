@@ -1,3 +1,4 @@
+using TaskBoard.API.Contracts.Requests;
 using TaskBoard.API.Mapping;
 using TaskBoard.BLL.Services;
 
@@ -21,6 +22,14 @@ public static class CardEndpoints
             return result.Match(
                 card => Results.Ok(card.ToFullResponse()),
                 errors => errors.ToResponse());
+        });
+
+        group.MapPost("", async (CreateCardRequest request, ICardService cardService) =>
+        {
+            var result = await cardService.CreateCardAsync(request.ToModel());
+            return result.Match(
+                card => Results.Created($"/cards/{card.Id}", card),
+                error => error.ToResponse());
         });
     }
 }

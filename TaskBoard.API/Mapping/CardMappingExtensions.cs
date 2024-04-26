@@ -1,3 +1,4 @@
+using TaskBoard.API.Contracts.Requests;
 using TaskBoard.API.Contracts.Responses;
 using TaskBoard.BLL.Models;
 
@@ -28,6 +29,18 @@ public static class CardMappingExtensions
             Priority = cardModel.Priority,
             ListId = cardModel.List.Id,
             ListName = cardModel.List.Name,
+        };
+    }
+
+    public static CreateCardModel ToModel(this CreateCardRequest request)
+    {
+        return new()
+        {
+            Name = request.Name,
+            Description = request.Description,
+            DueDate = request.DueDate,
+            Priority = request.Priority,
+            ListId = request.ListId
         };
     }
 }
