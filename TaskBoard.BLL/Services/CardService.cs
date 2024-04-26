@@ -9,7 +9,6 @@ using TaskBoard.DAL.Entities;
 
 namespace TaskBoard.BLL.Services;
 
-// TODO: refactor
 public class CardService : ICardService
 {
     private readonly TaskBoardDbContext _dbContext;
@@ -44,33 +43,19 @@ public class CardService : ICardService
         }
 
         var card = cardModel.ToEntity();
-        _dbContext.Cards.Add(card);
         using var transaction = await _dbContext.Database.BeginTransactionAsync();
         try
         {
-            await _dbContext.SaveChangesAsync();
-        }
-        catch
-        {
-            await transaction.RollbackAsync();
-            return Error.Failure();
-        }
-
-        var cardState = await CreateCardStateFromCardAsync(card, list, false);
-        _dbContext.CardStates.Add(cardState);
-        try
-        {
-            await _dbContext.SaveChangesAsync();
+            await AddCardAndCardStateAsync(card, list);
             await transaction.CommitAsync();
+            card.List = list;
+            return card.ToFullModel();
         }
         catch
         {
             await transaction.RollbackAsync();
             return Error.Failure();
         }
-
-        card.List = list;
-        return card.ToFullModel();
     }
 
     public async Task<ErrorOr<Deleted>> DeleteCardByIdAsync(int id)
@@ -135,24 +120,7 @@ public class CardService : ICardService
             return Result.Updated;
         }
 
-        var list = await _dbContext.Lists.FirstOrDefaultAsync(l => l.Id == cardModel.ListId);
-        if (list is null)
-        {
-            return Error.Validation(nameof(CreateCardModel.ListId), $"List with Id {cardModel.ListId} does not exist");
-        }
-
-        UpdateCardProperties(card, cardModel);
-        var cardState = await CreateCardStateFromCardAsync(card, list, false);
-        _dbContext.CardStates.Add(cardState);
-        try
-        {
-            await _dbContext.SaveChangesAsync();
-            return Result.Updated;
-        }
-        catch
-        {
-            return Error.Failure();
-        }
+        return await UpdateCardAndAddCardStateAsync(card, cardModel);
     }
 
     private static void UpdateCardProperties(Card card, UpdateCardModel cardModel)
@@ -191,5 +159,36 @@ public class CardService : ICardService
             Deleted = deleted,
             PreviousState = previousState,
         };
+    }
+
+    private async Task AddCardAndCardStateAsync(Card card, List list)
+    {
+        _dbContext.Cards.Add(card);
+        await _dbContext.SaveChangesAsync();
+        var cardState = await CreateCardStateFromCardAsync(card, list, false);
+        _dbContext.CardStates.Add(cardState);
+        await _dbContext.SaveChangesAsync();
+    }
+
+    private async Task<ErrorOr<Updated>> UpdateCardAndAddCardStateAsync(Card card, UpdateCardModel cardModel)
+    {
+        var list = await _dbContext.Lists.FirstOrDefaultAsync(l => l.Id == cardModel.ListId);
+        if (list is null)
+        {
+            return Error.Validation(nameof(CreateCardModel.ListId), $"List with Id {cardModel.ListId} does not exist");
+        }
+
+        UpdateCardProperties(card, cardModel);
+        var cardState = await CreateCardStateFromCardAsync(card, list, false);
+        _dbContext.CardStates.Add(cardState);
+        try
+        {
+            await _dbContext.SaveChangesAsync();
+            return Result.Updated;
+        }
+        catch
+        {
+            return Error.Failure();
+        }
     }
 }
