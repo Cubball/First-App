@@ -14,5 +14,13 @@ public static class CardEndpoints
             var response = result.ToAllCardsResponse();
             return Results.Ok(response);
         });
+
+        group.MapGet("{id}", async (int id, ICardService cardService) =>
+        {
+            var result = await cardService.GetCardByIdAsync(id);
+            return result.Match(
+                card => Results.Ok(card.ToFullResponse()),
+                errors => errors.ToResponse());
+        });
     }
 }

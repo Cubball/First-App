@@ -16,4 +16,18 @@ public static class CardMappingExtensions
             Priority = cardModel.Priority
         };
     }
+
+    public static CardFullResponse ToFullResponse(this CardFullModel cardModel)
+    {
+        return new()
+        {
+            Id = cardModel.Id,
+            Name = cardModel.Name,
+            Description = cardModel.Description,
+            DueDate = cardModel.DueDate,
+            Priority = cardModel.Priority,
+            ListId = cardModel.List.Id,
+            ListName = cardModel.List.Name,
+        };
+    }
 }
