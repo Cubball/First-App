@@ -28,7 +28,7 @@ public static class ListEndpoints
         {
             var result = await listService.CreateListAsync(request.ToModel());
             return result.Match(
-                list => Results.Created($"/lists/{list.Id}", list),
+                list => Results.Created($"/lists/{list.Id}", list.ToResponse()),
                 errors => errors.ToResponse());
         });
     }
