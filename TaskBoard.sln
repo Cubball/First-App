@@ -5,6 +5,8 @@ VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaskBoard.DAL", "TaskBoard.DAL\TaskBoard.DAL.csproj", "{8CD562C0-7F54-49FB-84C6-410797090A1D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaskBoard.BLL", "TaskBoard.BLL\TaskBoard.BLL.csproj", "{FF052E22-792F-4A9A-901D-D3F05C245EE0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,5 +20,9 @@ Global
 		{8CD562C0-7F54-49FB-84C6-410797090A1D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8CD562C0-7F54-49FB-84C6-410797090A1D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8CD562C0-7F54-49FB-84C6-410797090A1D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FF052E22-792F-4A9A-901D-D3F05C245EE0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FF052E22-792F-4A9A-901D-D3F05C245EE0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FF052E22-792F-4A9A-901D-D3F05C245EE0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FF052E22-792F-4A9A-901D-D3F05C245EE0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
