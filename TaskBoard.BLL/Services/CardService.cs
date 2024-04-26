@@ -130,6 +130,11 @@ public class CardService : ICardService
             return Error.NotFound();
         }
 
+        if (!DidPropertiesChange(card, cardModel))
+        {
+            return Result.Updated;
+        }
+
         var list = await _dbContext.Lists.FirstOrDefaultAsync(l => l.Id == cardModel.ListId);
         if (list is null)
         {
@@ -157,6 +162,15 @@ public class CardService : ICardService
         card.DueDate = cardModel.DueDate;
         card.Priority = cardModel.Priority;
         card.ListId = cardModel.ListId;
+    }
+
+    private static bool DidPropertiesChange(Card card, UpdateCardModel cardModel)
+    {
+        return card.Name != cardModel.Name
+            || card.Description != cardModel.Description
+            || card.DueDate != cardModel.DueDate
+            || card.Priority != cardModel.Priority
+            || card.ListId != cardModel.ListId;
     }
 
     private async Task<CardState> CreateCardStateFromCardAsync(Card card, List list, bool deleted)
