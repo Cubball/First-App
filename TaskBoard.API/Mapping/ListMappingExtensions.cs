@@ -42,6 +42,15 @@ public static class ListMappingExtensions
         return new()
         {
             Name = request.Name,
-       };
+        };
+    }
+
+    public static UpdateListModel ToModel(this (int Id, UpdateListRequest Request) tuple)
+    {
+        return new()
+        {
+            Id = tuple.Id,
+            Name = tuple.Request.Name,
+        };
     }
 }

@@ -31,5 +31,14 @@ public static class ListEndpoints
                 list => Results.Created($"/lists/{list.Id}", list.ToResponse()),
                 errors => errors.ToResponse());
         });
+
+        group.MapPut("{id}", async (int id, UpdateListRequest request, IListService listService) =>
+        {
+            var model = (id, request).ToModel();
+            var result = await listService.UpdateListAsync(model);
+            return result.Match(
+                _ => Results.NoContent(),
+                errors => errors.ToResponse());
+        });
     }
 }
