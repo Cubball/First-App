@@ -29,7 +29,16 @@ public static class CardEndpoints
             var result = await cardService.CreateCardAsync(request.ToModel());
             return result.Match(
                 card => Results.Created($"/cards/{card.Id}", card),
-                error => error.ToResponse());
+                errors => errors.ToResponse());
+        });
+
+        group.MapPut("{id}", async (int id, UpdateCardRequest request, ICardService cardService) =>
+        {
+            var model = (id, request).ToModel();
+            var result = await cardService.UpdateCardAsync(model);
+            return result.Match(
+                _ => Results.NoContent(),
+                errors => errors.ToResponse());
         });
     }
 }

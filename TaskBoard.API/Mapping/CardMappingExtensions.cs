@@ -43,4 +43,17 @@ public static class CardMappingExtensions
             ListId = request.ListId
         };
     }
+
+    public static UpdateCardModel ToModel(this (int Id, UpdateCardRequest Request) tuple)
+    {
+        return new()
+        {
+            Id = tuple.Id,
+            Name = tuple.Request.Name,
+            Description = tuple.Request.Description,
+            DueDate = tuple.Request.DueDate,
+            Priority = tuple.Request.Priority,
+            ListId = tuple.Request.ListId
+        };
+    }
 }
