@@ -22,4 +22,12 @@ public static class ListMappingExtensions
             Cards = list.Cards.Select(c => c.ToShortModel()).ToList(),
         };
     }
+
+    public static List ToEntity(this CreateListModel model)
+    {
+        return new()
+        {
+            Name = model.Name,
+        };
+    }
 }

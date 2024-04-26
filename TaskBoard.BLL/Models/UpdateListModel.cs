@@ -1,8 +1,6 @@
 namespace TaskBoard.BLL.Models;
 
-public class UpdateListModel
+public class UpdateListModel : CreateListModel
 {
     public int Id { get; set; }
-
-    public string Name { get; set; } = default!;
 }
