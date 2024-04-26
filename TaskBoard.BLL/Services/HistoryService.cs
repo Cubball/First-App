@@ -33,6 +33,7 @@ public class HistoryService : IHistoryService
         var skip = (page - 1) * pageSize;
         var states = await _dbContext.CardStates
             .Include(s => s.PreviousState)
+            .OrderByDescending(s => s.UpdatedAt)
             .Skip(skip)
             .Take(pageSize)
             .ToListAsync();
