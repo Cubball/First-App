@@ -1,4 +1,5 @@
 using ErrorOr;
+using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using TaskBoard.BLL.Mapping;
 using TaskBoard.BLL.Models;
@@ -9,15 +10,27 @@ namespace TaskBoard.BLL.Services;
 public class ListService : IListService
 {
     private readonly TaskBoardDbContext _dbContext;
+    private readonly IValidator<CreateListModel> _createListModelValidator;
+    private readonly IValidator<UpdateListModel> _updateListModelValidator;
 
-    public ListService(TaskBoardDbContext dbContext)
+    public ListService(
+        TaskBoardDbContext dbContext,
+        IValidator<CreateListModel> createListModelValidator,
+        IValidator<UpdateListModel> updateListModelValidator)
     {
         _dbContext = dbContext;
+        _createListModelValidator = createListModelValidator;
+        _updateListModelValidator = updateListModelValidator;
     }
 
     public async Task<ErrorOr<ListModel>> CreateListAsync(CreateListModel listModel)
     {
-        // TODO: validate
+        var validationResult = await _createListModelValidator.ValidateAsync(listModel);
+        if (!validationResult.IsValid)
+        {
+            return validationResult.ToValidationErrors<ListModel>();
+        }
+
         var list = listModel.ToEntity();
         _dbContext.Add(list);
         try
@@ -59,7 +72,12 @@ public class ListService : IListService
 
     public async Task<ErrorOr<Updated>> UpdateListAsync(UpdateListModel listModel)
     {
-        // TODO: validate
+        var validationResult = await _updateListModelValidator.ValidateAsync(listModel);
+        if (!validationResult.IsValid)
+        {
+            return validationResult.ToValidationErrors<Updated>();
+        }
+
         var list = await _dbContext.Lists.FindAsync(listModel.Id);
         if (list is null)
         {
