@@ -13,6 +13,7 @@ builder.Services.AddSingleton<IDateTimeProvider, DateTimeProvider>();
 builder.Services.AddValidatorsFromAssemblyContaining<IAssemblyMarker>();
 builder.Services.AddScoped<ICardService, CardService>();
 builder.Services.AddScoped<IListService, ListService>();
+builder.Services.AddScoped<IHistoryService, HistoryService>();
 builder.Services.AddScoped<DbInitializer>();
 
 var app = builder.Build();
@@ -22,7 +23,7 @@ var dbInitializer = scope.ServiceProvider.GetRequiredService<DbInitializer>();
 await dbInitializer.InitializeAsync();
 
 app.MapCardEndpoints();
-
 app.MapListEndpoints();
+app.MapHistoryEndpoints();
 
 app.Run();
