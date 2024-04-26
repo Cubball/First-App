@@ -1,3 +1,4 @@
+using TaskBoard.API.Contracts.Requests.List;
 using TaskBoard.API.Contracts.Responses.Card;
 using TaskBoard.API.Contracts.Responses.List;
 using TaskBoard.BLL.Models.Card;
@@ -34,5 +35,13 @@ public static class ListMappingExtensions
     public static AllListsResponse ToAllListsResponse(this IEnumerable<ListModel> lists)
     {
         return new() { Lists = lists.Select(l => l.ToResponse()) };
+    }
+
+    public static CreateListModel ToModel(this CreateListRequest request)
+    {
+        return new()
+        {
+            Name = request.Name,
+       };
     }
 }
