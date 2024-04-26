@@ -42,6 +42,7 @@ public class DbInitializer
 
     public async Task InitializeAsync()
     {
+        await _dbContext.Database.MigrateAsync();
         if (await _dbContext.Cards.AnyAsync())
         {
             return;
