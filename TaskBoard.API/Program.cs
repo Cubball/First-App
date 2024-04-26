@@ -20,4 +20,6 @@ using var scope = app.Services.CreateScope();
 var dbInitializer = scope.ServiceProvider.GetRequiredService<DbInitializer>();
 await dbInitializer.InitializeAsync();
 
+app.MapCardEndpoints();
+
 app.Run();
