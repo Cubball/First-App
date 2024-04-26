@@ -22,7 +22,6 @@ public class HistoryService : IHistoryService
 
     public async Task<ErrorOr<CardsChangesListModel>> GetCardChangesAsync(GetCardsChangesModel model)
     {
-        // NOTE: maybe better to return an error if these values are invalid?
         var validationResult = _getCardsChangesModelValidator.Validate(model);
         if (!validationResult.IsValid)
         {
