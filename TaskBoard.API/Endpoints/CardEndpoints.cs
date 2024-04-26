@@ -1,4 +1,4 @@
-using TaskBoard.API.Contracts.Requests;
+using TaskBoard.API.Contracts.Requests.Card;
 using TaskBoard.API.Mapping;
 using TaskBoard.BLL.Services;
 

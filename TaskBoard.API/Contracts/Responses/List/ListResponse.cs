@@ -1,4 +1,4 @@
-namespace TaskBoard.API.Contracts.Responses;
+namespace TaskBoard.API.Contracts.Responses.List;
 
 public class ListResponse
 {

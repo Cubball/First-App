@@ -1,4 +1,4 @@
-namespace TaskBoard.API.Contracts.Responses;
+namespace TaskBoard.API.Contracts.Responses.Card;
 
 public class ListWithCardsResponse
 {

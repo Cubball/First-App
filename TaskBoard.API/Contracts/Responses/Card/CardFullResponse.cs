@@ -1,7 +1,9 @@
-namespace TaskBoard.API.Contracts.Requests;
+namespace TaskBoard.API.Contracts.Responses.Card;
 
-public class UpdateCardRequest
+public class CardFullResponse
 {
+    public int Id { get; set; }
+
     public string Name { get; set; } = default!;
 
     public string Description { get; set; } = default!;
@@ -11,4 +13,6 @@ public class UpdateCardRequest
     public string Priority { get; set; } = default!;
 
     public int ListId { get; set; }
+
+    public string ListName { get; set; } = default!;
 }

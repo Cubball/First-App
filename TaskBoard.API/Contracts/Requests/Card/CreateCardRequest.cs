@@ -1,4 +1,4 @@
-namespace TaskBoard.API.Contracts.Requests;
+namespace TaskBoard.API.Contracts.Requests.Card;
 
 public class CreateCardRequest
 {

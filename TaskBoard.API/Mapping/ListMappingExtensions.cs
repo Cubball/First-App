@@ -1,4 +1,5 @@
-using TaskBoard.API.Contracts.Responses;
+using TaskBoard.API.Contracts.Responses.Card;
+using TaskBoard.API.Contracts.Responses.List;
 using TaskBoard.BLL.Models.List;
 
 namespace TaskBoard.API.Mapping;
