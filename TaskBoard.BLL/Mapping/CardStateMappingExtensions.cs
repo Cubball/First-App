@@ -13,6 +13,7 @@ public static class CardStateMappingExtensions
             Description = cardState.Description,
             DueDate = cardState.DueDate,
             Priority = cardState.Priority,
+            ListId = cardState.ListId,
             ListName = cardState.ListName,
         };
     }

@@ -14,6 +14,8 @@ public class CardState
 
     public string Priority { get; set; } = default!;
 
+    public int ListId { get; set; } = default!;
+
     public string ListName { get; set; } = default!;
 
     public DateTime UpdatedAt { get; set; }

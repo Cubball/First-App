@@ -164,7 +164,6 @@ public class CardService : ICardService
         var previousState = await _dbContext.CardStates
             .OrderByDescending(cs => cs.UpdatedAt)
             .FirstOrDefaultAsync(cs => cs.CardId == card.Id);
-        var dateTime = _dateTimeProvider.UtcNow;
         return new()
         {
             CardId = card.Id,
@@ -172,6 +171,7 @@ public class CardService : ICardService
             Description = card.Description,
             DueDate = card.DueDate,
             Priority = card.Priority,
+            ListId = list.Id,
             ListName = list.Name,
             UpdatedAt = _dateTimeProvider.UtcNow,
             Deleted = deleted,

@@ -10,5 +10,7 @@ public class CardStateModel
 
     public string Priority { get; set; } = default!;
 
+    public int ListId { get; set; } = default!;
+
     public string ListName { get; set; } = default!;
 }
