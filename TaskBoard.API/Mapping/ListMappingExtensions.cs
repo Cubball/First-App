@@ -19,4 +19,18 @@ public static class ListMappingExtensions
     {
         return new() { Lists = lists.Select(l => l.ToListWithCardsResponse()) };
     }
+
+    public static ListResponse ToResponse(this ListModel list)
+    {
+        return new()
+        {
+            Id = list.Id,
+            Name = list.Name,
+        };
+    }
+
+    public static AllListsResponse ToAllListsResponse(this IEnumerable<ListModel> lists)
+    {
+        return new() { Lists = lists.Select(l => l.ToResponse()) };
+    }
 }
