@@ -40,5 +40,13 @@ public static class CardEndpoints
                 _ => Results.NoContent(),
                 errors => errors.ToResponse());
         });
+
+        group.MapDelete("{id}", async (int id, ICardService cardService) =>
+        {
+            var result = await cardService.DeleteCardByIdAsync(id);
+            return result.Match(
+                _ => Results.NoContent(),
+                errors => errors.ToResponse());
+        });
     }
 }
