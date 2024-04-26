@@ -1,5 +1,5 @@
 using TaskBoard.API.Contracts.Responses;
-using TaskBoard.BLL.Models;
+using TaskBoard.BLL.Models.List;
 
 namespace TaskBoard.API.Mapping;
 

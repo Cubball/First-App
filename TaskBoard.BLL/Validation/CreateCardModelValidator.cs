@@ -1,6 +1,6 @@
 using FluentValidation;
 using TaskBoard.BLL.Infrastructure;
-using TaskBoard.BLL.Models;
+using TaskBoard.BLL.Models.Card;
 
 namespace TaskBoard.BLL.Validation;
 

@@ -1,4 +1,6 @@
-namespace TaskBoard.BLL.Models;
+using TaskBoard.BLL.Models.List;
+
+namespace TaskBoard.BLL.Models.Card;
 
 public class CardFullModel : CardShortModel
 {

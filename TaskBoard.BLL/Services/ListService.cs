@@ -2,7 +2,7 @@ using ErrorOr;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using TaskBoard.BLL.Mapping;
-using TaskBoard.BLL.Models;
+using TaskBoard.BLL.Models.List;
 using TaskBoard.DAL.Data;
 
 namespace TaskBoard.BLL.Services;

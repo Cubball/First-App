@@ -1,5 +1,5 @@
 using FluentValidation;
-using TaskBoard.BLL.Models;
+using TaskBoard.BLL.Models.List;
 
 namespace TaskBoard.BLL.Validation;
 

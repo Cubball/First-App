@@ -1,9 +1,7 @@
-namespace TaskBoard.BLL.Models;
+namespace TaskBoard.BLL.Models.Card;
 
-public class CardShortModel
+public class CreateCardModel
 {
-    public int Id { get; set; }
-
     public string Name { get; set; } = default!;
 
     public string Description { get; set; } = default!;
@@ -11,4 +9,6 @@ public class CardShortModel
     public DateTime DueDate { get; set; }
 
     public string Priority { get; set; } = default!;
+
+    public int ListId { get; set; }
 }

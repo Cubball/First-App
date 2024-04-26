@@ -1,4 +1,4 @@
-namespace TaskBoard.BLL.Models;
+namespace TaskBoard.BLL.Models.Card;
 
 public class UpdateCardModel : CreateCardModel
 {

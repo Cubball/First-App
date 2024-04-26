@@ -1,6 +1,6 @@
 using TaskBoard.API.Contracts.Requests;
 using TaskBoard.API.Contracts.Responses;
-using TaskBoard.BLL.Models;
+using TaskBoard.BLL.Models.Card;
 
 namespace TaskBoard.API.Mapping;
 

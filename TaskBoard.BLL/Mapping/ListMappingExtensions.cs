@@ -1,4 +1,4 @@
-using TaskBoard.BLL.Models;
+using TaskBoard.BLL.Models.List;
 using TaskBoard.DAL.Entities;
 
 namespace TaskBoard.BLL.Mapping;
