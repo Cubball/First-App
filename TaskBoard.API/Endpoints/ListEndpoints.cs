@@ -40,5 +40,13 @@ public static class ListEndpoints
                 _ => Results.NoContent(),
                 errors => errors.ToResponse());
         });
+
+        group.MapDelete("{id}", async (int id, IListService listService) =>
+        {
+            var result = await listService.DeleteListByIdAsync(id);
+            return result.Match(
+                _ => Results.NoContent(),
+                errors => errors.ToResponse());
+        });
     }
 }
