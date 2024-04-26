@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaskBoard.DAL", "TaskBoard.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaskBoard.BLL", "TaskBoard.BLL\TaskBoard.BLL.csproj", "{FF052E22-792F-4A9A-901D-D3F05C245EE0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaskBoard.API", "TaskBoard.API\TaskBoard.API.csproj", "{402FA6B6-16B0-414E-9913-CFC57AF34AC2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,5 +26,9 @@ Global
 		{FF052E22-792F-4A9A-901D-D3F05C245EE0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FF052E22-792F-4A9A-901D-D3F05C245EE0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FF052E22-792F-4A9A-901D-D3F05C245EE0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{402FA6B6-16B0-414E-9913-CFC57AF34AC2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{402FA6B6-16B0-414E-9913-CFC57AF34AC2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{402FA6B6-16B0-414E-9913-CFC57AF34AC2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{402FA6B6-16B0-414E-9913-CFC57AF34AC2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
