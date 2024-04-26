@@ -103,7 +103,7 @@ public class CardService : ICardService
             .Include(l => l.Cards)
             .ToListAsync();
         var listModels = listsWithCards.Select(l => l.ToModelWithCards()).ToList();
-        listModels.ForEach(l => l.Cards.Sort((c1, c2) => c2.DueDate.CompareTo(c1.DueDate)));
+        listModels.ForEach(l => l.Cards.Sort((c1, c2) => c1.DueDate.CompareTo(c2.DueDate)));
         return listModels;
     }
 
