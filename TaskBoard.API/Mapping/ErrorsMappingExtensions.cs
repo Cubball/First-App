@@ -20,8 +20,7 @@ public static class ErrorsMappingExtensions
             ErrorType.Forbidden => Results.Forbid(),
             ErrorType.NotFound => Results.NotFound(),
             ErrorType.Conflict => Results.Conflict(error.Description),
-            // TODO: maybe return just 500 without Description?
-            ErrorType.Failure or ErrorType.Unexpected or _ => Results.Problem(error.Description),
+            ErrorType.Failure or ErrorType.Unexpected or _ => Results.Problem(),
         };
     }
 
