@@ -7,6 +7,8 @@ public interface IListService
 {
     Task<IEnumerable<ListModel>> GetAllListsAsync();
 
+    Task<ErrorOr<ListModel>> GetListByIdAsync(int id);
+
     Task<ErrorOr<ListModel>> CreateListAsync(CreateListModel listModel);
 
     Task<ErrorOr<Updated>> UpdateListAsync(UpdateListModel listModel);

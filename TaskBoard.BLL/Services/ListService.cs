@@ -70,6 +70,12 @@ public class ListService : IListService
         return lists.Select(l => l.ToModel()).ToList();
     }
 
+    public async Task<ErrorOr<ListModel>> GetListByIdAsync(int id)
+    {
+        var list = await _dbContext.Lists.FindAsync(id);
+        return list is null ? Error.NotFound() : list.ToModel();
+    }
+
     public async Task<ErrorOr<Updated>> UpdateListAsync(UpdateListModel listModel)
     {
         var validationResult = await _updateListModelValidator.ValidateAsync(listModel);
