@@ -16,6 +16,14 @@ public static class ListEndpoints
             return Results.Ok(response);
         });
 
+        group.MapGet("{id}", async (int id, IListService listService) =>
+        {
+            var result = await listService.GetListByIdAsync(id);
+            return result.Match(
+                list => Results.Ok(list.ToResponse()),
+                errors => errors.ToResponse());
+        });
+
         group.MapPost("", async (CreateListRequest request, IListService listService) =>
         {
             var result = await listService.CreateListAsync(request.ToModel());
