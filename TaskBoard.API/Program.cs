@@ -20,9 +20,17 @@ builder.Services.AddTransient<GlobalErrorHandlingMiddleware>();
 
 var app = builder.Build();
 
-using var scope = app.Services.CreateScope();
-var dbInitializer = scope.ServiceProvider.GetRequiredService<DbInitializer>();
-await dbInitializer.InitializeAsync();
+try
+{
+    using var scope = app.Services.CreateScope();
+    var dbInitializer = scope.ServiceProvider.GetRequiredService<DbInitializer>();
+    await dbInitializer.InitializeAsync();
+}
+catch (Exception e)
+{
+    app.Logger.LogError(e, "Failed to initialize the database: {ExceptionMessage}", e.Message);
+    return;
+}
 
 app.UseMiddleware<GlobalErrorHandlingMiddleware>();
 
