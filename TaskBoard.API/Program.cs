@@ -1,6 +1,7 @@
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using TaskBoard.API.Endpoints;
+using TaskBoard.API.Middleware;
 using TaskBoard.BLL.Infrastructure;
 using TaskBoard.BLL.Services;
 using TaskBoard.DAL.Data;
@@ -15,12 +16,15 @@ builder.Services.AddScoped<ICardService, CardService>();
 builder.Services.AddScoped<IListService, ListService>();
 builder.Services.AddScoped<IHistoryService, HistoryService>();
 builder.Services.AddScoped<DbInitializer>();
+builder.Services.AddTransient<GlobalErrorHandlingMiddleware>();
 
 var app = builder.Build();
 
 using var scope = app.Services.CreateScope();
 var dbInitializer = scope.ServiceProvider.GetRequiredService<DbInitializer>();
 await dbInitializer.InitializeAsync();
+
+app.UseMiddleware<GlobalErrorHandlingMiddleware>();
 
 app.MapCardEndpoints();
 app.MapListEndpoints();
