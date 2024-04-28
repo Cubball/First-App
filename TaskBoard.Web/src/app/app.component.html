@@ -1,4 +1,8 @@
-<div class="p-5 text-gray-900">
+<div class="flex max-h-screen flex-col overflow-y-hidden p-5 text-gray-900">
   <app-header></app-header>
-  <app-task-board [listsWithCards]="listsWithCards"></app-task-board>
+  <app-task-board
+    [listsWithCards]="listsWithCards"
+    class="flex overflow-x-auto"
+    style="scrollbar-width: none"
+  ></app-task-board>
 </div>
