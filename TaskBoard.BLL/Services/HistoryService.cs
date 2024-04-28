@@ -20,6 +20,20 @@ public class HistoryService : IHistoryService
         _getCardsChangesModelValidator = getCardsChangesModelValidator;
     }
 
+    public async Task<IEnumerable<CardChangeModel>> GetAllChangesByCardIdAsync(int id)
+    {
+        var states = await _dbContext.CardStates
+            .Where(s => s.CardId == id)
+            .OrderByDescending(s => s.UpdatedAt)
+            .ToListAsync();
+        for (var i = 0; i < states.Count - 1; i++)
+        {
+            states[i].PreviousState = states[i + 1];
+        }
+
+        return states.Select(s => s.ToChangeModel()).ToList();
+    }
+
     public async Task<ErrorOr<CardsChangesListModel>> GetCardChangesAsync(GetCardsChangesModel model)
     {
         var validationResult = _getCardsChangesModelValidator.Validate(model);

@@ -39,4 +39,9 @@ public static class CardStateMappingExtensions
             Items = model.Items.Select(i => i.ToResponse()),
         };
     }
+
+    public static AllCardChangesResponse ToAllCardChangesResponse(this IEnumerable<CardChangeModel> changeModels)
+    {
+        return new() { Changes = changeModels.Select(c => c.ToResponse()) };
+    }
 }
