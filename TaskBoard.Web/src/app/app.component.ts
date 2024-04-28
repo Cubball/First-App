@@ -19,7 +19,7 @@ export class AppComponent {
         {
           id: 1,
           name: 'Card Name 1',
-          description: 'description',
+          description: 'Lorem ipsum dolor sit amet, qui minim labore adipisicing minim sint cillum sint consectetur cupidatat.',
           dueDate: new Date('2024-05-01T00:00:00Z'),
           priority: 'Low',
         },

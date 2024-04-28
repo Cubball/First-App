@@ -1,1 +1,43 @@
-<p>{{ card.name }}</p>
+<article class="flex flex-col gap-2 rounded-md border border-gray-300 p-3">
+  <h3 class="flex justify-between font-medium">
+    <span>{{ card.name }}</span>
+    <button>
+      <fa-icon [icon]="faEllipsisVertical" class="mx-3"></fa-icon>
+    </button>
+  </h3>
+  <p class="text-sm text-gray-500">{{ card.description }}</p>
+  <p>
+    <fa-icon [icon]="faCalendar" class="mr-2"></fa-icon>
+    <span class="text-sm text-gray-500">{{
+      card.dueDate.toLocaleDateString("en-US", {
+        month: "short",
+        day: "numeric",
+        weekday: "short"
+      })
+    }}</span>
+  </p>
+  <!-- TODO: change text color depending on the priority -->
+  <p class="w-fit rounded-full bg-gray-100 px-2.5 pb-0.5 text-sm text-gray-500">
+    &bullet; {{ card.priority }}
+  </p>
+  <div class="relative text-sm font-medium">
+    <button
+      class="peer relative flex w-full justify-between rounded-md bg-gray-300 px-3 py-1.5"
+    >
+      <span>Move to:</span>
+      <fa-icon [icon]="faChevronDown"></fa-icon>
+    </button>
+    <div
+      class="absolute hidden w-full translate-y-1 rounded-md border border-gray-300 bg-white active:block peer-focus:block"
+    >
+      <button
+        *ngFor="let list of availableLists"
+        class="block w-full px-3 py-1.5 text-left hover:bg-gray-100"
+        (click)="onMoveToClick(list.id)"
+      >
+        <fa-icon [icon]="faArrowRight" class="mr-1.5 text-xs"></fa-icon
+        >{{ list.name }}
+      </button>
+    </div>
+  </div>
+</article>
