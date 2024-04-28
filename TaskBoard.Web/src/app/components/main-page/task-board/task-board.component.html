@@ -1,5 +1,5 @@
-<app-list-of-cards
-  *ngFor="let list of listsWithCards"
-  [list]="list"
-></app-list-of-cards>
-<!-- add list component -->
+<!-- TODO: style the scroll bar -->
+<div class="flex justify-between gap-5 overflow-x-auto">
+  <app-list-of-cards *ngFor="let list of listsWithCards" [list]="list" class="min-w-64 shrink grow"></app-list-of-cards>
+  <!-- add list component -->
+</div>
