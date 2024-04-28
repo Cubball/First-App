@@ -11,5 +11,5 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 export class HeaderComponent {
   faArrowRotateLeft = faArrowRotateLeft;
 
-  onHistoryButtonClick(): void { }
+  onHistoryButtonClick(): void {}
 }

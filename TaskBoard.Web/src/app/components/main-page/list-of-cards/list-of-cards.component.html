@@ -1,1 +1,4 @@
-<p>list-of-cards works!</p>
+<!-- list name + card count -->
+<h2>{{ list.name }}</h2>
+<!-- add new card button -->
+<app-card *ngFor="let card of list.cards" [card]="card"></app-card>
