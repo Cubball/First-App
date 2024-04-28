@@ -9,11 +9,7 @@
   <p>
     <fa-icon [icon]="faCalendar" class="mr-2"></fa-icon>
     <span class="text-sm text-gray-500">{{
-      card.dueDate.toLocaleDateString("en-US", {
-        month: "short",
-        day: "numeric",
-        weekday: "short"
-      })
+      card.dueDate | date: "ccc, d MMM"
     }}</span>
   </p>
   <!-- TODO: change text color depending on the priority -->
