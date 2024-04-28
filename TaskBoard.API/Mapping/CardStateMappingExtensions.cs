@@ -25,7 +25,7 @@ public static class CardStateMappingExtensions
             CardId = model.CardId,
             UpdatedAt = model.UpdatedAt,
             PreviousState = model.PreviousState?.ToResponse(),
-            CurrentState = model.PreviousState?.ToResponse(),
+            CurrentState = model.CurrentState?.ToResponse(),
         };
     }
 
