@@ -12,11 +12,12 @@ export class ModalComponent {
 
   constructor(private location: Location) {}
 
-  onClick(event: MouseEvent, dialog: HTMLDialogElement) {
-    const clickedOutside = event.target !== dialog;
-    if (clickedOutside) {
-      dialog.close();
-    }
+  onClick(dialog: HTMLDialogElement) {
+    dialog.close();
+  }
+
+  onDialogClick(e: MouseEvent) {
+    e.stopPropagation();
   }
 
   onDialogClosed(): void {

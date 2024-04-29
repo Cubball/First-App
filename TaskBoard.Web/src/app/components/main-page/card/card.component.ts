@@ -13,11 +13,12 @@ import { EditDeleteMenuComponent } from '../../shared/edit-delete-menu/edit-dele
 import { ListService } from '../../../services/list.service';
 import { List } from '../../../types/shared/list';
 import { Observable } from 'rxjs';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-card',
   standalone: true,
-  imports: [EditDeleteMenuComponent, FontAwesomeModule, CommonModule],
+  imports: [EditDeleteMenuComponent, RouterLink, FontAwesomeModule, CommonModule],
   templateUrl: './card.component.html',
 })
 export class CardComponent {
