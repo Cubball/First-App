@@ -17,6 +17,6 @@ export class TaskBoardComponent {
   allCards$!: Observable<ListWithCards[]>;
 
   listTrackBy(index: number, list: ListWithCards) {
-    return list.id
+    return list.id;
   }
 }

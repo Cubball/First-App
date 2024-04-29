@@ -4,24 +4,11 @@
     <button class="peer">
       <fa-icon [icon]="faEllipsisVertical" class="mx-3"></fa-icon>
     </button>
-    <div
-      class="absolute right-0 top-8 hidden w-fit rounded-md border border-gray-300 bg-white active:block peer-focus:block"
-    >
-      <button
-        class="block w-full px-3 py-1.5 text-left hover:bg-gray-100"
-        (click)="onEditClick()"
-      >
-        <fa-icon [icon]="faPenToSquare" class="mr-1"></fa-icon>
-        Edit
-      </button>
-      <button
-        class="block w-full px-3 py-1.5 text-left text-red-500 hover:bg-gray-100"
-        (click)="onDeleteClick()"
-      >
-        <fa-icon [icon]="faTrashCan" class="mr-1"></fa-icon>
-        Delete
-      </button>
-    </div>
+    <app-edit-delete-menu
+      class="absolute right-0 top-8 hidden active:block peer-focus:block"
+      (editClick)="onEditClick()"
+      (deleteClick)="onDeleteClick()"
+    ></app-edit-delete-menu>
   </h3>
   <p class="text-sm text-gray-500">{{ card.description }}</p>
   <p>

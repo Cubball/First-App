@@ -3,28 +3,24 @@ import { CardInList } from '../../../types/card-in-list';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import {
   faEllipsisVertical,
-  faCircle,
   faChevronDown,
   faArrowRight,
-  faTrashCan,
 } from '@fortawesome/free-solid-svg-icons';
-import { faCalendar, faPenToSquare } from '@fortawesome/free-regular-svg-icons';
+import { faCalendar } from '@fortawesome/free-regular-svg-icons';
 import { CommonModule } from '@angular/common';
+import { EditDeleteMenuComponent } from '../../shared/edit-delete-menu/edit-delete-menu.component';
 
 @Component({
   selector: 'app-card',
   standalone: true,
-  imports: [FontAwesomeModule, CommonModule],
+  imports: [EditDeleteMenuComponent, FontAwesomeModule, CommonModule],
   templateUrl: './card.component.html',
 })
 export class CardComponent {
   faEllipsisVertical = faEllipsisVertical;
   faCalendar = faCalendar;
-  faCircle = faCircle;
   faChevronDown = faChevronDown;
   faArrowRight = faArrowRight;
-  faPenToSquare = faPenToSquare;
-  faTrashCan = faTrashCan;
 
   @Input() card!: CardInList;
   // TODO: should be an input

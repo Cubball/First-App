@@ -20,18 +20,20 @@
       [formControl]="inputControl"
     />
     <div class="flex justify-between gap-2">
-      <button
-        class="grow rounded-md bg-gray-500 p-2 text-white"
-        (click)="onAddListClick()"
+      <app-form-button
+        text="Add list"
+        class="grow"
+        [style]="'Primary'"
+        (click)="onSaveNewListClick()"
       >
-        Add list
-      </button>
-      <button
-        class="grow rounded-md border border-gray-300 p-2"
+      </app-form-button>
+      <app-form-button
+        text="Cancel"
+        class="grow"
+        [style]="'Secondary'"
         (click)="onCancelClick()"
       >
-        Cancel
-      </button>
+      </app-form-button>
     </div>
   }
 </div>
