@@ -1,9 +1,27 @@
 <article class="flex flex-col gap-2 rounded-md border border-gray-300 p-3">
-  <h3 class="flex justify-between font-medium">
+  <h3 class="relative flex justify-between font-medium">
     <span>{{ card.name }}</span>
-    <button>
+    <button class="peer">
       <fa-icon [icon]="faEllipsisVertical" class="mx-3"></fa-icon>
     </button>
+    <div
+      class="absolute right-0 top-8 hidden w-fit rounded-md border border-gray-300 bg-white active:block peer-focus:block"
+    >
+      <button
+        class="block w-full px-3 py-1.5 text-left hover:bg-gray-100"
+        (click)="onEditClick()"
+      >
+        <fa-icon [icon]="faPenToSquare" class="mr-1"></fa-icon>
+        Edit
+      </button>
+      <button
+        class="block w-full px-3 py-1.5 text-left text-red-500 hover:bg-gray-100"
+        (click)="onDeleteClick()"
+      >
+        <fa-icon [icon]="faTrashCan" class="mr-1"></fa-icon>
+        Delete
+      </button>
+    </div>
   </h3>
   <p class="text-sm text-gray-500">{{ card.description }}</p>
   <p>
@@ -12,8 +30,10 @@
       card.dueDate | date: "ccc, d MMM"
     }}</span>
   </p>
-  <!-- TODO: change text color depending on the priority -->
-  <p class="w-fit rounded-full bg-gray-100 px-2.5 pb-0.5 text-sm text-gray-500">
+  <p
+    class="w-fit rounded-full px-2.5 pb-0.5 text-sm"
+    [ngClass]="getPriorityiClasses()"
+  >
     &bullet; {{ card.priority }}
   </p>
   <div class="relative text-sm font-medium">
@@ -24,7 +44,7 @@
       <fa-icon [icon]="faChevronDown"></fa-icon>
     </button>
     <div
-      class="absolute hidden w-full translate-y-1 rounded-md border border-gray-300 bg-white active:block peer-focus:block"
+      class="absolute z-10 hidden w-full translate-y-1 rounded-md border border-gray-300 bg-white active:block peer-focus:block"
     >
       <button
         *ngFor="let list of availableLists"
