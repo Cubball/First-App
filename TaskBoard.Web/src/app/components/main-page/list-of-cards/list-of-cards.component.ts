@@ -1,10 +1,10 @@
 import { Component, Input } from '@angular/core';
-import { ListWithCards } from '../../../types/list-with-cards';
+import { ListWithCards } from '../../../types/shared/list-with-cards';
 import { CardComponent } from '../card/card.component';
 import { CommonModule } from '@angular/common';
 import { faEllipsisVertical, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { CardInList } from '../../../types/card-in-list';
+import { CardInList } from '../../../types/shared/card-in-list';
 import { EditDeleteMenuComponent } from '../../shared/edit-delete-menu/edit-delete-menu.component';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { FormButtonComponent } from '../../shared/form-button/form-button.component';

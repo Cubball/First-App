@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { CardInList } from '../../../types/card-in-list';
+import { CardInList } from '../../../types/shared/card-in-list';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import {
   faEllipsisVertical,
