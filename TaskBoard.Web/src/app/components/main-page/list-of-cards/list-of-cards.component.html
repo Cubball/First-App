@@ -21,6 +21,6 @@
     class="flex flex-col gap-3 overflow-y-auto"
     style="scrollbar-width: none"
   >
-    <app-card *ngFor="let card of list.cards" [card]="card"></app-card>
+    <app-card *ngFor="let card of list.cards; trackBy: cardTrackBy" [card]="card"></app-card>
   </div>
 </div>

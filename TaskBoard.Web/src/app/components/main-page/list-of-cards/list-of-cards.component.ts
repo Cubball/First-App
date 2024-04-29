@@ -17,4 +17,7 @@ export class ListOfCardsComponent {
   @Input() list!: ListWithCards;
 
   onAddNewCardClick() { }
+  cardTrackBy(index: number, card: CardInList) {
+    return card.id;
+  }
 }
