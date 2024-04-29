@@ -1,0 +1,10 @@
+<div
+  class="absolute left-0 top-0 h-screen w-screen bg-gray-400 bg-opacity-50 {{
+    extraClasses
+  }}"
+  (click)="onClick($event, modal)"
+>
+  <dialog open (close)="onDialogClosed()" #modal>
+    <ng-content></ng-content>
+  </dialog>
+</div>
