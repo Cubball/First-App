@@ -5,9 +5,11 @@ import { CommonModule } from '@angular/common';
 import { faEllipsisVertical, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { CardInList } from '../../../types/shared/card-in-list';
+import { CardService } from '../../../services/card.service';
 import { EditDeleteMenuComponent } from '../../shared/edit-delete-menu/edit-delete-menu.component';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { FormButtonComponent } from '../../shared/form-button/form-button.component';
+import { ListService } from '../../../services/list.service';
 
 @Component({
   selector: 'app-list-of-cards',
@@ -18,7 +20,7 @@ import { FormButtonComponent } from '../../shared/form-button/form-button.compon
     EditDeleteMenuComponent,
     CommonModule,
     FontAwesomeModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
   ],
   templateUrl: './list-of-cards.component.html',
 })
@@ -30,9 +32,11 @@ export class ListOfCardsComponent {
   editListPopupOpen = false;
   inputControl = new FormControl('');
 
+  constructor(private listService: ListService) {}
 
-  onAddNewCardClick() { }
-  cardTrackBy(index: number, card: CardInList) {
+  onAddNewCardClick() {}
+
+  cardTrackBy(_: number, card: CardInList) {
     return card.id;
   }
 
@@ -42,11 +46,14 @@ export class ListOfCardsComponent {
   }
 
   onDeleteClick() {
-    alert('delete ' + this.list.id);
+    this.listService.deleteList(this.list.id);
   }
 
   onSaveClick(): void {
-    alert(this.inputControl.value);
+    this.listService.updateList(this.list.id, {
+      name: this.inputControl.value ?? '',
+    });
+    this.editListPopupOpen = false;
   }
 
   onCancelClick(): void {

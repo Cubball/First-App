@@ -10,9 +10,9 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 export class FormButtonComponent {
   @Input() style!: "Primary" | "Secondary";
   @Input() text!: string;
-  @Output() click = new EventEmitter<void>();
+  @Output() buttonClick = new EventEmitter<void>();
 
   onClick(): void {
-    this.click.emit();
+    this.buttonClick.emit();
   }
 }

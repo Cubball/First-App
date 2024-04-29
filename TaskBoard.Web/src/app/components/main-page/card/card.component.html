@@ -34,7 +34,7 @@
       class="absolute z-10 hidden w-full translate-y-1 rounded-md border border-gray-300 bg-white active:block peer-focus:block"
     >
       <button
-        *ngFor="let list of availableLists"
+        *ngFor="let list of availableLists$ | async"
         class="block w-full px-3 py-1.5 text-left hover:bg-gray-100"
         (click)="onMoveToClick(list.id)"
       >

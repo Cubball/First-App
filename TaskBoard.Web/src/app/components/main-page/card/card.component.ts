@@ -8,7 +8,11 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { faCalendar } from '@fortawesome/free-regular-svg-icons';
 import { CommonModule } from '@angular/common';
+import { CardService } from '../../../services/card.service';
 import { EditDeleteMenuComponent } from '../../shared/edit-delete-menu/edit-delete-menu.component';
+import { ListService } from '../../../services/list.service';
+import { List } from '../../../types/shared/list';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-card',
@@ -23,21 +27,17 @@ export class CardComponent {
   faArrowRight = faArrowRight;
 
   @Input() card!: CardInList;
-  // TODO: should be an input
-  availableLists = [
-    {
-      id: 1,
-      name: 'foo',
-    },
-    {
-      id: 2,
-      name: 'bar',
-    },
-  ];
+  availableLists$: Observable<List[]>
+
+  constructor(private cardService: CardService, private listService: ListService) {
+    this.availableLists$ = this.listService.getAllLists();
+  }
 
   onMoveToClick(selectedId: number): void {
-    // TODO: handle selection changed
-    console.log('Selected: ' + selectedId);
+    this.cardService.updateCard(this.card.id, {
+      ...this.card,
+      listId: selectedId,
+    });
   }
 
   onEditClick(): void {
@@ -45,7 +45,7 @@ export class CardComponent {
   }
 
   onDeleteClick(): void {
-    alert('delete ' + this.card.id);
+    this.cardService.deleteCard(this.card.id);
   }
 
   getPriorityiClasses() {

@@ -3,6 +3,7 @@ import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { FormButtonComponent } from '../../shared/form-button/form-button.component';
+import { ListService } from '../../../services/list.service';
 
 @Component({
   selector: 'app-add-new-list',
@@ -16,6 +17,8 @@ export class AddNewListComponent {
   addListPopupOpen = false;
   inputControl = new FormControl('');
 
+  constructor(private listService: ListService) {}
+
   onAddNewListClick(): void {
     this.inputControl.setValue('');
     this.addListPopupOpen = true;
@@ -26,7 +29,9 @@ export class AddNewListComponent {
   }
 
   onSaveNewListClick(): void {
-    console.log(`Adding a new list with name ${this.inputControl.value}`);
-    // TODO: add list, when done - hide popup, clear input
+    this.listService.addList({
+      name: this.inputControl.value ?? '',
+    });
+    this.addListPopupOpen = false;
   }
 }

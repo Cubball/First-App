@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { HeaderComponent } from './components/main-page/header/header.component';
 import { TaskBoardComponent } from './components/main-page/task-board/task-board.component';
-import { ListWithCards } from './types/list-with-cards';
+import { ListWithCards } from './types/shared/list-with-cards';
 
 @Component({
   selector: 'app-root',
