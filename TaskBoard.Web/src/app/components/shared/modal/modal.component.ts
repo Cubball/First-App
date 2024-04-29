@@ -1,5 +1,5 @@
-import { Location } from '@angular/common';
 import { Component, Input } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-modal',
@@ -10,7 +10,7 @@ import { Component, Input } from '@angular/core';
 export class ModalComponent {
   @Input() extraClasses = '';
 
-  constructor(private location: Location) {}
+  constructor(private router: Router) {}
 
   onClick(dialog: HTMLDialogElement) {
     dialog.close();
@@ -21,6 +21,6 @@ export class ModalComponent {
   }
 
   onDialogClosed(): void {
-    this.location.back();
+    this.router.navigate(['/']);
   }
 }

@@ -5,11 +5,11 @@ import { CommonModule } from '@angular/common';
 import { faEllipsisVertical, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { CardInList } from '../../../types/shared/card-in-list';
-import { CardService } from '../../../services/card.service';
 import { EditDeleteMenuComponent } from '../../shared/edit-delete-menu/edit-delete-menu.component';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { FormButtonComponent } from '../../shared/form-button/form-button.component';
 import { ListService } from '../../../services/list.service';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-list-of-cards',
@@ -18,6 +18,7 @@ import { ListService } from '../../../services/list.service';
     CardComponent,
     FormButtonComponent,
     EditDeleteMenuComponent,
+    RouterLink,
     CommonModule,
     FontAwesomeModule,
     ReactiveFormsModule,
@@ -33,8 +34,6 @@ export class ListOfCardsComponent {
   inputControl = new FormControl('');
 
   constructor(private listService: ListService) {}
-
-  onAddNewCardClick() {}
 
   cardTrackBy(_: number, card: CardInList) {
     return card.id;

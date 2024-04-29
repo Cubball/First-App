@@ -1,1 +1,2 @@
-export type Priority = 'Low' | 'Medium' | 'High';
+export const ALLOWED_PRIORITIES = ['Low', 'Medium', 'High'] as const;
+export type Priority = (typeof ALLOWED_PRIORITIES)[number];

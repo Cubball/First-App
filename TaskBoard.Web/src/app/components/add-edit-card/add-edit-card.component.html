@@ -1,0 +1,108 @@
+<app-modal extraClasses="flex justify-center items-center">
+  <!-- TODO: width, height -->
+  <main
+    class="flex h-[80vh] min-h-60 w-[60vw] min-w-80 flex-col overflow-hidden overflow-y-auto rounded-xl bg-white text-gray-900"
+    style="scrollbar-width: none"
+  >
+    <div class="bg-gray-500 text-right">
+      <form method="dialog">
+        <button class="px-5 py-2" #closeButton>
+          <fa-icon [icon]="faXmark" class="text-xl text-white"></fa-icon>
+        </button>
+      </form>
+    </div>
+    <div class="p-3 md:p-5">
+      <form [formGroup]="formGroup">
+        <input
+          type="text"
+          placeholder="Enter card name..."
+          class="w-full text-xl font-bold md:text-2xl"
+          formControlName="name"
+          required
+          minlength="2"
+          maxlength="100"
+        />
+        <ul class="py-2 text-xs *:py-1 md:text-sm md:*:py-2">
+          <li>
+            <label
+              for="listId"
+              class="inline-block w-1/3 max-w-32 text-gray-500"
+            >
+              <fa-icon [icon]="faListUl" class="mr-1"></fa-icon>
+              List
+            </label>
+            <select
+              id="listId"
+              formControlName="listId"
+              class="rounded-md border border-gray-300 bg-gray-100 px-1 py-0.5 outline outline-white"
+              required
+            >
+              <option
+                *ngFor="let list of lists$ | async; trackBy: listTrackBy"
+                [value]="list.id"
+              >
+                {{ list.name }}
+              </option>
+            </select>
+          </li>
+          <li>
+            <label
+              for="dueDate"
+              class="inline-block w-1/3 max-w-32 text-gray-500"
+            >
+              <fa-icon [icon]="faCalendar" class="mr-1"></fa-icon>
+              Due date </label
+            ><input
+              formControlName="dueDate"
+              id="dueDate"
+              type="date"
+              class="rounded-md border border-gray-300 bg-gray-100 px-1 py-0.5"
+              required
+            />
+          </li>
+          <li>
+            <label
+              for="priority"
+              class="inline-block w-1/3 max-w-32 text-gray-500"
+            >
+              <fa-icon [icon]="faTag" class="mr-1"></fa-icon>
+              Priority
+            </label>
+            <select
+              id="priority"
+              formControlName="priority"
+              class="rounded-md border border-gray-300 bg-gray-100 px-1 py-0.5 outline outline-white"
+              required
+            >
+              <option [value]="null" disabled selected hidden>Select the priority</option>
+              <option
+                *ngFor="let priorityValue of allowedPriorities"
+                [value]="priorityValue"
+              >
+                {{ priorityValue }}
+              </option>
+            </select>
+          </li>
+        </ul>
+        <h3 class="py-1.5 text-lg font-bold md:py-3 md:text-xl">Description</h3>
+        <textarea
+          formControlName="description"
+          placeholder="Write some information..."
+          class="w-full rounded-md border border-gray-300 p-2 text-xs md:text-sm"
+        ></textarea>
+        <div class="wrap flex gap-1 pt-1 *:grow md:pt-2">
+          <app-form-button
+            text="Save"
+            [style]="'Primary'"
+            (buttonClick)="onSaveClick(closeButton)"
+          >
+          </app-form-button>
+          <app-form-button
+            text="Cancel"
+            (buttonClick)="onCancelClick(closeButton)"
+          ></app-form-button>
+        </div>
+      </form>
+    </div>
+  </main>
+</app-modal>

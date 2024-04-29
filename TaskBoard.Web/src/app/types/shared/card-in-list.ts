@@ -4,6 +4,6 @@ export interface CardInList {
   id: number;
   name: string;
   description: string;
-  dueDate: Date;
+  dueDate: string;
   priority: Priority;
 }

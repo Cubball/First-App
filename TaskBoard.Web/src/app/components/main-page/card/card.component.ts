@@ -13,12 +13,17 @@ import { EditDeleteMenuComponent } from '../../shared/edit-delete-menu/edit-dele
 import { ListService } from '../../../services/list.service';
 import { List } from '../../../types/shared/list';
 import { Observable } from 'rxjs';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-card',
   standalone: true,
-  imports: [EditDeleteMenuComponent, RouterLink, FontAwesomeModule, CommonModule],
+  imports: [
+    EditDeleteMenuComponent,
+    RouterLink,
+    FontAwesomeModule,
+    CommonModule,
+  ],
   templateUrl: './card.component.html',
 })
 export class CardComponent {
@@ -28,9 +33,13 @@ export class CardComponent {
   faArrowRight = faArrowRight;
 
   @Input() card!: CardInList;
-  availableLists$: Observable<List[]>
+  availableLists$: Observable<List[]>;
 
-  constructor(private cardService: CardService, private listService: ListService) {
+  constructor(
+    private cardService: CardService,
+    private listService: ListService,
+    private router: Router,
+  ) {
     this.availableLists$ = this.listService.getAllLists();
   }
 
@@ -42,7 +51,7 @@ export class CardComponent {
   }
 
   onEditClick(): void {
-    alert('edit ' + this.card.id);
+    this.router.navigate(['cards', this.card.id, 'edit']);
   }
 
   onDeleteClick(): void {

@@ -3,7 +3,7 @@ import { Priority } from "../shared/priority";
 export interface CreateUpdateCard {
   name: string;
   description: string;
-  dueDate: Date;
+  dueDate: string;
   priority: Priority;
   listId: number;
 }

@@ -18,7 +18,7 @@
     </h2>
     <button
       class="rounded-md border border-dashed border-gray-300 p-2 font-medium"
-      (click)="onAddNewCardClick()"
+      routerLink="/cards/new/{{ list.id }}"
     >
       <fa-icon [icon]="faPlus" class="mr-3"></fa-icon>
       Add new card

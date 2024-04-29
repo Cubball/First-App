@@ -4,7 +4,7 @@ export interface Card {
   id: number;
   name: string;
   description: string;
-  dueDate: Date;
+  dueDate: string;
   priority: Priority;
   listId: number;
   listName: string;
