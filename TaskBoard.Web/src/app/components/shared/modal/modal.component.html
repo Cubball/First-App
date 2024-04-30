@@ -4,7 +4,13 @@
   }}"
   (click)="onClick(modal)"
 >
-<dialog open (close)="onDialogClosed()" (click)="onDialogClick($event)" #modal class="bg-transparent">
+  <dialog
+    open
+    (close)="onDialogClosed()"
+    (click)="onDialogClick($event)"
+    #modal
+    class="relative m-0 bg-transparent"
+  >
     <ng-content></ng-content>
   </dialog>
 </div>
