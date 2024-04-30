@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, map } from 'rxjs';
 import { ListWithCards } from '../types/shared/list-with-cards';
-import { environment } from '../../environments/environment.development';
+import { environment } from '../../environments/environment';
 import { CreateUpdateCard } from '../types/requests/create-update-card';
 import { Card } from '../types/shared/card';
 
