@@ -61,7 +61,6 @@ export class CardDetailsComponent {
       .subscribe((card) => (this.card = card));
     this.lists$ = this.listService.getAllLists();
     this.changes$ = this.historyService.getAllChangesForCard(cardId);
-    this.changes$.subscribe((response) => console.log(response));
   }
 
   listTrackBy(_: number, list: List) {
