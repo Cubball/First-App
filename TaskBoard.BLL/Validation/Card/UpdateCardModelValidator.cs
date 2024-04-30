@@ -1,5 +1,4 @@
 using FluentValidation;
-using TaskBoard.BLL.Infrastructure;
 using TaskBoard.BLL.Models.Card;
 using TaskBoard.BLL.Validation.Common;
 
@@ -7,7 +6,7 @@ namespace TaskBoard.BLL.Validation.Card;
 
 public class UpdateCardModelValidator : AbstractValidator<UpdateCardModel>
 {
-    public UpdateCardModelValidator(IDateTimeProvider dateTimeProvider)
+    public UpdateCardModelValidator()
     {
         RuleFor(c => c.Name)
             .NotNull()
@@ -17,7 +16,6 @@ public class UpdateCardModelValidator : AbstractValidator<UpdateCardModel>
             .NotNull()
             .MaximumLength(1000);
         RuleFor(c => c.DueDate)
-            .InTheFuture(dateTimeProvider)
             .UtcKind();
         RuleFor(c => c.Priority)
             .ValidPriority();
