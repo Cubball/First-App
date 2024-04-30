@@ -48,4 +48,8 @@ export class HistorySidebarComponent {
         this.totalItems = response.totalItems;
       });
   }
+
+  changeTrackBy(index: number, _: CardChange): number {
+    return index;
+  }
 }

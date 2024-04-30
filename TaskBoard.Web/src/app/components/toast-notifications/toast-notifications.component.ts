@@ -7,6 +7,7 @@ import {
   faCircleCheck,
   faCircleXmark,
 } from '@fortawesome/free-regular-svg-icons';
+import { ToastNotification } from '../../types/toast/toast-notification';
 
 @Component({
   selector: 'app-toast-notifications',
@@ -31,7 +32,7 @@ export class ToastNotificationsComponent {
 
   constructor(public toastService: ToastService) {}
 
-  getNumber(): string {
-    return String(Math.random())
+  toastTrackBy(index: number, _: ToastNotification): number {
+    return index;
   }
 }

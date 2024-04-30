@@ -68,6 +68,10 @@ export class CardDetailsComponent {
     return list.id;
   }
 
+  changeTrackBy(index: number, _: CardChange) {
+    return index;
+  }
+
   onMoveToSelect(listId: string) {
     if (!this.card) {
       return;

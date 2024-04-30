@@ -73,7 +73,7 @@
       <aside class="grow basis-[40%] bg-gray-100 p-5">
         <h2 class="pt-1 text-lg font-bold md:text-xl">Activity</h2>
         <app-card-change
-          *ngFor="let cardChange of changes$ | async"
+          *ngFor="let cardChange of changes$ | async; trackBy: changeTrackBy"
           [cardChange]="cardChangesFormatter.getFormattedChange(cardChange)"
         >
         </app-card-change>

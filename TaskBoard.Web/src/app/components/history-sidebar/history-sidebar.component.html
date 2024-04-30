@@ -14,7 +14,7 @@
     </h2>
     <div class="overflow-y-auto px-5 py-3" style="scrollbar-width: none">
       <app-card-change
-        *ngFor="let change of changes"
+        *ngFor="let change of changes; trackBy: changeTrackBy"
         [cardChange]="cardChangesFormatter.getFormattedChange(change)"
       ></app-card-change>
       <button

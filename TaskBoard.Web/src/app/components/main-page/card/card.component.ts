@@ -82,4 +82,8 @@ export class CardComponent {
         return 'bg-gray-300 text-gray-800';
     }
   }
+
+  listTrackBy(_: number, list: List) {
+    return list.id;
+  }
 }
