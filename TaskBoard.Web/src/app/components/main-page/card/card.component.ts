@@ -14,6 +14,7 @@ import { ListService } from '../../../services/list.service';
 import { List } from '../../../types/shared/list';
 import { Observable } from 'rxjs';
 import { Router, RouterLink } from '@angular/router';
+import { EllipsisPipe } from '../../../pipes/ellipsis.pipe';
 
 @Component({
   selector: 'app-card',
@@ -21,6 +22,7 @@ import { Router, RouterLink } from '@angular/router';
   imports: [
     EditDeleteMenuComponent,
     RouterLink,
+    EllipsisPipe,
     FontAwesomeModule,
     CommonModule,
   ],

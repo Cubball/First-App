@@ -5,12 +5,12 @@
       <fa-icon [icon]="faEllipsisVertical" class="mx-3"></fa-icon>
     </button>
     <app-edit-delete-menu
-      class="absolute right-0 top-8 hidden active:block peer-focus:block"
+      class="absolute right-0 top-8 z-10 hidden active:block peer-focus:block"
       (editClick)="onEditClick()"
       (deleteClick)="onDeleteClick()"
     ></app-edit-delete-menu>
   </h3>
-  <p class="text-sm text-gray-500">{{ card.description }}</p>
+  <p class="text-sm text-gray-500">{{ card.description | ellipsis }}</p>
   <p>
     <fa-icon [icon]="faCalendar" class="mr-2"></fa-icon>
     <span class="text-sm text-gray-500">{{
