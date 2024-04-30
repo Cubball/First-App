@@ -1,0 +1,12 @@
+<button
+  *ngFor="let toast of toastService.toasts; let i = index"
+  @toastTrigger
+  (click)="toastService.removeToast(i)"
+  class="m-1 rounded-md bg-gray-100 p-3 block border-2 border-gray-900"
+>
+  <fa-icon
+    [icon]="toast.type === 'Success' ? faCircleCheck : faCircleXmark"
+    class="mr-1 text-lg"
+  ></fa-icon>
+  {{ toast.message }}
+</button>

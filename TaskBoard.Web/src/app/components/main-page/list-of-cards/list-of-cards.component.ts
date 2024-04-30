@@ -10,6 +10,7 @@ import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { FormButtonComponent } from '../../shared/form-button/form-button.component';
 import { ListService } from '../../../services/list.service';
 import { RouterLink } from '@angular/router';
+import { ToastService } from '../../../services/toast.service';
 
 @Component({
   selector: 'app-list-of-cards',
@@ -33,7 +34,7 @@ export class ListOfCardsComponent {
   editListPopupOpen = false;
   inputControl = new FormControl('');
 
-  constructor(private listService: ListService) {}
+  constructor(private listService: ListService, private toastService: ToastService) {}
 
   cardTrackBy(_: number, card: CardInList) {
     return card.id;
@@ -45,12 +46,20 @@ export class ListOfCardsComponent {
   }
 
   onDeleteClick() {
-    this.listService.deleteList(this.list.id);
+    this.listService.deleteList(this.list.id).subscribe({
+      next: () => this.toastService.addToast('List deleted!', 'Success'),
+      error: () =>
+        this.toastService.addToast('Failed to delete the list', 'Error'),
+    });
   }
 
   onSaveClick(): void {
     this.listService.updateList(this.list.id, {
       name: this.inputControl.value ?? '',
+    }).subscribe({
+      next: () => this.toastService.addToast('List updated!', 'Success'),
+      error: () =>
+        this.toastService.addToast('Failed to update the list', 'Error'),
     });
     this.editListPopupOpen = false;
   }

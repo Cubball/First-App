@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, map } from 'rxjs';
+import { BehaviorSubject, Observable, map, tap } from 'rxjs';
 import { ListWithCards } from '../types/shared/list-with-cards';
 import { environment } from '../../environments/environment';
 import { CreateUpdateCard } from '../types/requests/create-update-card';
@@ -28,26 +28,21 @@ export class CardService {
   }
 
   addCard(card: CreateUpdateCard): Observable<void> {
-    const observable = this.httpClient.post<void>(this.cardsEndpoint, card);
-    observable.subscribe(() => this.refetchCards());
-    return observable;
+    return this.httpClient
+      .post<void>(this.cardsEndpoint, card)
+      .pipe(tap(() => this.refetchCards()));
   }
 
   updateCard(id: number, card: CreateUpdateCard): Observable<void> {
-    const observable = this.httpClient.put<void>(
-      `${this.cardsEndpoint}/${id}`,
-      card,
-    );
-    observable.subscribe(() => this.refetchCards());
-    return observable;
+    return this.httpClient
+      .put<void>(`${this.cardsEndpoint}/${id}`, card)
+      .pipe(tap(() => this.refetchCards()));
   }
 
   deleteCard(cardId: number): Observable<void> {
-    const observable = this.httpClient.delete<void>(
-      `${this.cardsEndpoint}/${cardId}`,
-    );
-    observable.subscribe((_) => this.refetchCards());
-    return observable;
+    return this.httpClient
+      .delete<void>(`${this.cardsEndpoint}/${cardId}`)
+      .pipe(tap(() => this.refetchCards()));
   }
 
   refetchCards(): void {

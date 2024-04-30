@@ -15,6 +15,7 @@ import { List } from '../../../types/shared/list';
 import { Observable } from 'rxjs';
 import { Router, RouterLink } from '@angular/router';
 import { EllipsisPipe } from '../../../pipes/ellipsis.pipe';
+import { ToastService } from '../../../services/toast.service';
 
 @Component({
   selector: 'app-card',
@@ -40,16 +41,23 @@ export class CardComponent {
   constructor(
     private cardService: CardService,
     private listService: ListService,
+    private toastService: ToastService,
     private router: Router,
   ) {
     this.availableLists$ = this.listService.getAllLists();
   }
 
   onMoveToClick(selectedId: number): void {
-    this.cardService.updateCard(this.card.id, {
-      ...this.card,
-      listId: selectedId,
-    });
+    this.cardService
+      .updateCard(this.card.id, {
+        ...this.card,
+        listId: selectedId,
+      })
+      .subscribe({
+        next: () => this.toastService.addToast('Card moved!', 'Success'),
+        error: () =>
+          this.toastService.addToast('Failed to move the card', 'Error'),
+      });
   }
 
   onEditClick(): void {
@@ -57,7 +65,11 @@ export class CardComponent {
   }
 
   onDeleteClick(): void {
-    this.cardService.deleteCard(this.card.id);
+    this.cardService.deleteCard(this.card.id).subscribe({
+      next: () => this.toastService.addToast('Card deleted!', 'Success'),
+      error: () =>
+        this.toastService.addToast('Failed to delete the card', 'Error'),
+    });
   }
 
   getPriorityiClasses() {

@@ -4,6 +4,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { FormButtonComponent } from '../../shared/form-button/form-button.component';
 import { ListService } from '../../../services/list.service';
+import { ToastService } from '../../../services/toast.service';
 
 @Component({
   selector: 'app-add-new-list',
@@ -17,7 +18,7 @@ export class AddNewListComponent {
   addListPopupOpen = false;
   inputControl = new FormControl('');
 
-  constructor(private listService: ListService) {}
+  constructor(private listService: ListService, private toastService: ToastService) {}
 
   onAddNewListClick(): void {
     this.inputControl.setValue('');
@@ -31,6 +32,10 @@ export class AddNewListComponent {
   onSaveNewListClick(): void {
     this.listService.addList({
       name: this.inputControl.value ?? '',
+    }).subscribe({
+      next: () => this.toastService.addToast('List added!', 'Success'),
+      error: () =>
+        this.toastService.addToast('Failed to add the list', 'Error'),
     });
     this.addListPopupOpen = false;
   }

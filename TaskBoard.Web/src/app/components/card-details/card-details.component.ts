@@ -20,6 +20,7 @@ import { HistoryService } from '../../services/history.service';
 import { CardChange } from '../../types/shared/card-change';
 import { CardChangeComponent } from '../shared/card-change/card-change.component';
 import { CardChangesFormatterService } from '../../services/card-changes-formatter.service';
+import { ToastService } from '../../services/toast.service';
 
 @Component({
   selector: 'app-card-details',
@@ -51,6 +52,7 @@ export class CardDetailsComponent {
     private cardService: CardService,
     private listService: ListService,
     private historyService: HistoryService,
+    private toastService: ToastService,
     public cardChangesFormatter: CardChangesFormatterService,
   ) {
     const cardId = this.activatedRoute.snapshot.params['id'];
@@ -76,11 +78,15 @@ export class CardDetailsComponent {
         ...this.card,
         listId: Number(listId),
       })
-      .subscribe(
-        () =>
-          (this.changes$ = this.historyService.getAllChangesForCard(
+      .subscribe({
+        next: () => {
+          this.toastService.addToast('Card moved!', 'Success');
+          this.changes$ = this.historyService.getAllChangesForCard(
             this.card!.id,
-          )),
-      );
+          );
+        },
+        error: () =>
+          this.toastService.addToast('Failed to move the card', 'Error'),
+      });
   }
 }
