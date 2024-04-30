@@ -43,12 +43,33 @@ public class DbInitializer
     public async Task InitializeAsync()
     {
         await _dbContext.Database.MigrateAsync();
-        if (await _dbContext.Cards.AnyAsync())
+        if (await _dbContext.CardStates.AnyAsync())
         {
             return;
         }
 
+        using var transaction = await _dbContext.Database.BeginTransactionAsync();
         _dbContext.Lists.AddRange(_lists);
         await _dbContext.SaveChangesAsync();
+        var states = _lists
+            .SelectMany(l => l.Cards)
+            .Select(c => new CardState
+            {
+                CardId = c.Id,
+                Name = c.Name,
+                Description = c.Description,
+                DueDate = c.DueDate,
+                Priority = c.Priority,
+                ListId = c.ListId,
+                ListName = _lists.First(l => l.Id == c.ListId).Name,
+                Deleted = false,
+                UpdatedAt = DateTime.UtcNow,
+                PreviousState = null,
+                PreviousStateId = null,
+            })
+            .ToList();
+        _dbContext.CardStates.AddRange(states);
+        await _dbContext.SaveChangesAsync();
+        await transaction.CommitAsync();
     }
 }
