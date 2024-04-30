@@ -17,6 +17,12 @@ builder.Services.AddScoped<IListService, ListService>();
 builder.Services.AddScoped<IHistoryService, HistoryService>();
 builder.Services.AddScoped<DbInitializer>();
 builder.Services.AddTransient<GlobalErrorHandlingMiddleware>();
+var allowedOrigins = builder.Configuration.GetSection("Cors:AllowedOrigins").Get<string[]>() ?? [];
+builder.Services.AddCors(
+    o => o.AddDefaultPolicy(
+        pb => pb.WithOrigins(allowedOrigins)
+                .AllowAnyHeader()
+                .AllowAnyMethod()));
 
 var app = builder.Build();
 
@@ -33,6 +39,8 @@ catch (Exception e)
 }
 
 app.UseMiddleware<GlobalErrorHandlingMiddleware>();
+
+app.UseCors();
 
 app.MapCardEndpoints();
 app.MapListEndpoints();
