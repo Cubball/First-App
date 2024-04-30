@@ -1,8 +1,6 @@
 <app-modal extraClasses="flex justify-center items-center">
-  <!-- TODO: width, height -->
   <main
-    class="flex h-[80vh] min-h-60 w-[60vw] min-w-80 flex-col overflow-hidden overflow-y-auto rounded-xl bg-white text-gray-900"
-    style="scrollbar-width: none"
+    class="max-h-fit w-fit overflow-hidden rounded-xl bg-white text-gray-900"
   >
     <div class="bg-gray-500 text-right">
       <form method="dialog">
@@ -11,7 +9,7 @@
         </button>
       </form>
     </div>
-    <div class="p-3 md:p-5">
+    <div class="p-5">
       <form [formGroup]="formGroup">
         <input
           type="text"
@@ -51,8 +49,9 @@
               class="inline-block w-1/3 max-w-32 text-gray-500"
             >
               <fa-icon [icon]="faCalendar" class="mr-1"></fa-icon>
-              Due date </label
-            ><input
+              Due date
+            </label>
+            <input
               formControlName="dueDate"
               id="dueDate"
               type="date"
@@ -74,7 +73,9 @@
               class="rounded-md border border-gray-300 bg-gray-100 px-1 py-0.5 outline outline-white"
               required
             >
-              <option [value]="null" disabled selected hidden>Select the priority</option>
+              <option [value]="null" disabled selected hidden>
+                Select the priority
+              </option>
               <option
                 *ngFor="let priorityValue of allowedPriorities"
                 [value]="priorityValue"
