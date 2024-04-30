@@ -71,7 +71,12 @@
         </div>
       </article>
       <aside class="grow basis-[40%] bg-gray-100 p-5">
-        <!-- TODO: history -->
+        <h2 class="pt-1 text-lg font-bold md:text-xl">Activity</h2>
+        <app-card-change
+          *ngFor="let cardChange of changes$ | async"
+          [cardChange]="cardChangesFormatter.getFormattedChange(cardChange)"
+        >
+        </app-card-change>
       </aside>
     </div>
   </main>

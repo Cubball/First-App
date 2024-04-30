@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { CardChange } from '../types/shared/card-change';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, map } from 'rxjs';
 import { CardChangesList } from '../types/shared/card-changes-list';
 
 @Injectable({
@@ -14,9 +14,9 @@ export class HistoryService {
   constructor(private httpClient: HttpClient) {}
 
   getAllChangesForCard(cardId: number): Observable<CardChange[]> {
-    return this.httpClient.get<CardChange[]>(
-      `${this.historyEndpoint}/${cardId}`,
-    );
+    return this.httpClient
+      .get<{ changes: CardChange[] }>(`${this.historyEndpoint}/${cardId}`)
+      .pipe(map((response) => response.changes));
   }
 
   getAllChanges(page: number, pageSize: number): Observable<CardChangesList> {

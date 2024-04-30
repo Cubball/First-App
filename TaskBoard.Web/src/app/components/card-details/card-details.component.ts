@@ -16,12 +16,17 @@ import { Observable } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { ListService } from '../../services/list.service';
 import { List } from '../../types/shared/list';
+import { HistoryService } from '../../services/history.service';
+import { CardChange } from '../../types/shared/card-change';
+import { CardChangeComponent } from '../shared/card-change/card-change.component';
+import { CardChangesFormatterService } from '../../services/card-changes-formatter.service';
 
 @Component({
   selector: 'app-card-details',
   standalone: true,
   imports: [
     ModalComponent,
+    CardChangeComponent,
     RouterLink,
     FontAwesomeModule,
     CommonModule,
@@ -38,18 +43,23 @@ export class CardDetailsComponent {
   faTag = faTag;
 
   card?: Card;
+  changes$: Observable<CardChange[]>;
   lists$: Observable<List[]>;
 
   constructor(
     private activatedRoute: ActivatedRoute,
     private cardService: CardService,
     private listService: ListService,
+    private historyService: HistoryService,
+    public cardChangesFormatter: CardChangesFormatterService,
   ) {
     const cardId = this.activatedRoute.snapshot.params['id'];
     this.cardService
       .getCardById(cardId)
       .subscribe((card) => (this.card = card));
     this.lists$ = this.listService.getAllLists();
+    this.changes$ = this.historyService.getAllChangesForCard(cardId);
+    this.changes$.subscribe(response => console.log(response))
   }
 
   listTrackBy(_: number, list: List) {
