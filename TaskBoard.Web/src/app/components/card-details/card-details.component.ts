@@ -59,7 +59,7 @@ export class CardDetailsComponent {
       .subscribe((card) => (this.card = card));
     this.lists$ = this.listService.getAllLists();
     this.changes$ = this.historyService.getAllChangesForCard(cardId);
-    this.changes$.subscribe(response => console.log(response))
+    this.changes$.subscribe((response) => console.log(response));
   }
 
   listTrackBy(_: number, list: List) {
@@ -71,9 +71,16 @@ export class CardDetailsComponent {
       return;
     }
 
-    this.cardService.updateCard(this.card.id, {
-      ...this.card,
-      listId: Number(listId),
-    });
+    this.cardService
+      .updateCard(this.card.id, {
+        ...this.card,
+        listId: Number(listId),
+      })
+      .subscribe(
+        () =>
+          (this.changes$ = this.historyService.getAllChangesForCard(
+            this.card!.id,
+          )),
+      );
   }
 }

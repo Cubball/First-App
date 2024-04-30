@@ -24,25 +24,30 @@ export class CardService {
   }
 
   getCardById(id: number): Observable<Card> {
-    return this.httpClient.get<Card>(`${this.cardsEndpoint}/${id}`)
+    return this.httpClient.get<Card>(`${this.cardsEndpoint}/${id}`);
   }
 
-  addCard(card: CreateUpdateCard): void {
-    this.httpClient
-      .post(this.cardsEndpoint, card)
-      .subscribe((_) => this.refetchCards());
+  addCard(card: CreateUpdateCard): Observable<void> {
+    const observable = this.httpClient.post<void>(this.cardsEndpoint, card);
+    observable.subscribe(() => this.refetchCards());
+    return observable;
   }
 
-  updateCard(id: number, card: CreateUpdateCard): void {
-    this.httpClient
-      .put(`${this.cardsEndpoint}/${id}`, card)
-      .subscribe((_) => this.refetchCards());
+  updateCard(id: number, card: CreateUpdateCard): Observable<void> {
+    const observable = this.httpClient.put<void>(
+      `${this.cardsEndpoint}/${id}`,
+      card,
+    );
+    observable.subscribe(() => this.refetchCards());
+    return observable;
   }
 
-  deleteCard(cardId: number): void {
-    this.httpClient
-      .delete(`${this.cardsEndpoint}/${cardId}`)
-      .subscribe((_) => this.refetchCards());
+  deleteCard(cardId: number): Observable<void> {
+    const observable = this.httpClient.delete<void>(
+      `${this.cardsEndpoint}/${cardId}`,
+    );
+    observable.subscribe((_) => this.refetchCards());
+    return observable;
   }
 
   refetchCards(): void {

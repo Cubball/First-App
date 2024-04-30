@@ -24,25 +24,36 @@ export class ListService {
     return this.lists.asObservable();
   }
 
-  addList(list: CreateUpdateList) {
-    this.httpClient.post(this.listsEndpoint, list).subscribe((_) => {
+  addList(list: CreateUpdateList): Observable<void> {
+    const observable = this.httpClient.post<void>(this.listsEndpoint, list);
+    observable.subscribe(() => {
       this.fetchLists();
       this.cardService.refetchCards();
     });
+    return observable;
   }
 
-  updateList(id: number, list: CreateUpdateList) {
-    this.httpClient.put(`${this.listsEndpoint}/${id}`, list).subscribe((_) => {
+  updateList(id: number, list: CreateUpdateList): Observable<void> {
+    const observable = this.httpClient.put<void>(
+      `${this.listsEndpoint}/${id}`,
+      list,
+    );
+    observable.subscribe(() => {
       this.fetchLists();
       this.cardService.refetchCards();
     });
+    return observable;
   }
 
-  deleteList(id: number) {
-    this.httpClient.delete(`${this.listsEndpoint}/${id}`).subscribe((_) => {
+  deleteList(id: number): Observable<void> {
+    const observable = this.httpClient.delete<void>(
+      `${this.listsEndpoint}/${id}`,
+    );
+    observable.subscribe(() => {
       this.fetchLists();
       this.cardService.refetchCards();
     });
+    return observable;
   }
 
   private fetchLists(): void {
