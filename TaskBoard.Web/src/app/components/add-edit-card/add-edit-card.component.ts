@@ -1,5 +1,10 @@
 import { Component } from '@angular/core';
-import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import {
+  FormControl,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import { ModalComponent } from '../shared/modal/modal.component';
 import { ActivatedRoute } from '@angular/router';
 import { CardService } from '../../services/card.service';
@@ -41,7 +46,11 @@ export class AddEditCardComponent {
   lists$: Observable<List[]>;
   cardId: number | undefined;
   formGroup = new FormGroup({
-    name: new FormControl('', [Validators.minLength(2), Validators.maxLength(100), Validators.required]),
+    name: new FormControl('', [
+      Validators.minLength(2),
+      Validators.maxLength(100),
+      Validators.required,
+    ]),
     description: new FormControl(''),
     dueDate: new FormControl<string>(''),
     priority: new FormControl<Priority | null>(null),
@@ -62,7 +71,9 @@ export class AddEditCardComponent {
         this.formGroup = new FormGroup({
           name: new FormControl(card.name),
           description: new FormControl(card.description),
-          dueDate: new FormControl(card.dueDate.substring(0, 10)),
+          dueDate: new FormControl(
+            this.getLocalDateStringFromUTCDateString(card.dueDate),
+          ),
           priority: new FormControl(card.priority),
           listId: new FormControl(card.listId),
         });
@@ -93,7 +104,9 @@ export class AddEditCardComponent {
       description: this.formGroup.value.description!,
       priority: this.formGroup.value.priority!,
       listId: this.formGroup.value.listId!,
-      dueDate: new Date(this.formGroup.value.dueDate!).toISOString(),
+      dueDate: this.getUTCDateFromLocalDateString(
+        this.formGroup.value.dueDate!,
+      ).toISOString(),
     };
 
     if (this.cardId) {
@@ -111,5 +124,19 @@ export class AddEditCardComponent {
     }
 
     closeButton.click();
+  }
+
+  private getUTCDateFromLocalDateString(dateString: string): Date {
+    const offset = new Date().getTimezoneOffset();
+    const date = new Date(dateString);
+    date.setMinutes(date.getMinutes() + offset);
+    return date;
+  }
+
+  private getLocalDateStringFromUTCDateString(dateString: string): string {
+    const offset = new Date().getTimezoneOffset();
+    const date = new Date(dateString);
+    date.setMinutes(date.getMinutes() - offset);
+    return date.toISOString().split('T')[0];
   }
 }
