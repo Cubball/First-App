@@ -1,0 +1,42 @@
+name: taskboard
+services:
+  web:
+    container_name: web
+    build:
+      context: .
+      dockerfile: ./TaskBoard.Web/Dockerfile
+    ports:
+      - 5000:80
+    depends_on:
+      api:
+        condition: service_started
+  api:
+    container_name: api
+    build:
+      context: .
+      dockerfile: ./TaskBoard.API/Dockerfile
+    ports:
+      - 5001:5001
+    environment:
+      - ConnectionStrings__DefaultConnection=Host=postgres;Database=TaskBoard;Username=postgres;Password=password
+      - Cors__AllowedOrigins__0=http://localhost:5000
+    depends_on:
+      postgres:
+        condition: service_healthy
+  postgres:
+    container_name: postgres
+    image: postgres:latest
+    ports:
+      - 5002:5432
+    environment:
+      - POSTGRES_PASSWORD=password
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 10s
+      retries: 10
+
+volumes:
+  db-data:
