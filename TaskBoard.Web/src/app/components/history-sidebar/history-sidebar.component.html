@@ -1,0 +1,30 @@
+<app-modal extraClasses="flex justify-end items-center">
+  <aside
+    class="flex h-screen w-screen max-w-3xl flex-col overflow-y-hidden bg-gray-100 sm:w-[30vw]"
+  >
+    <h2
+      class="flex justify-between bg-gray-500 text-lg font-medium text-white *:p-3 md:text-xl md:*:p-5"
+    >
+      <span>History</span>
+      <form method="dialog">
+        <button>
+          <fa-icon [icon]="faXmark"></fa-icon>
+        </button>
+      </form>
+    </h2>
+    <div class="overflow-y-auto px-5 py-3" style="scrollbar-width: none">
+      <app-card-change
+        *ngFor="let change of changes; trackBy: changeTrackBy"
+        [cardChange]="cardChangesFormatter.getFormattedChange(change)"
+      ></app-card-change>
+      <button
+        *ngIf="hasMore()"
+        class="my-3 w-full rounded-md border border-gray-900 bg-gray-100 p-1.5 font-medium"
+        (click)="getMoreChanges()"
+      >
+        <fa-icon [icon]="faArrowRotateLeft"></fa-icon>
+        Show more
+      </button>
+    </div>
+  </aside>
+</app-modal>

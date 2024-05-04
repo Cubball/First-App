@@ -1,0 +1,18 @@
+<div
+  class="w-fit rounded-md border border-gray-300 bg-white"
+>
+  <button
+    class="block w-full px-3 py-1.5 text-left hover:bg-gray-100"
+    (click)="onEditClick()"
+  >
+    <fa-icon [icon]="faPenToSquare" class="mr-1"></fa-icon>
+    Edit
+  </button>
+  <button
+    class="block w-full px-3 py-1.5 text-left text-red-500 hover:bg-gray-100"
+    (click)="onDeleteClick()"
+  >
+    <fa-icon [icon]="faTrashCan" class="mr-1"></fa-icon>
+    Delete
+  </button>
+</div>

@@ -1,0 +1,9 @@
+<button
+  class="w-full rounded-md p-2"
+  [ngClass]="
+    style === 'Primary' ? 'bg-gray-500 text-white' : 'border border-gray-300'
+  "
+  (click)="onClick()"
+>
+  {{ text }}
+</button>

@@ -1,0 +1,39 @@
+<div class="flex flex-col gap-3">
+  @if (!addListPopupOpen) {
+    <h2
+      class="flex items-center justify-between border-b border-t border-gray-300 py-2 font-medium"
+    >
+      <span>Add another list</span>
+      <span>
+        <button (click)="onAddNewListClick()">
+          <fa-icon [icon]="faPlus" class="mx-3"></fa-icon>
+        </button>
+      </span>
+    </h2>
+  } @else {
+    <input
+      type="text"
+      minlength="2"
+      maxlength="100"
+      placeholder="Enter list title..."
+      class="rounded-md border border-gray-400 bg-gray-100 p-2"
+      [formControl]="inputControl"
+    />
+    <div class="flex justify-between gap-2">
+      <app-form-button
+        text="Add list"
+        class="grow"
+        [style]="'Primary'"
+        (buttonClick)="onSaveNewListClick()"
+      >
+      </app-form-button>
+      <app-form-button
+        text="Cancel"
+        class="grow"
+        [style]="'Secondary'"
+        (buttonClick)="onCancelClick()"
+      >
+      </app-form-button>
+    </div>
+  }
+</div>

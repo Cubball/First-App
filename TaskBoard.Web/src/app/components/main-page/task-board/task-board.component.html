@@ -1,0 +1,8 @@
+<div class="flex justify-start gap-5">
+  <app-list-of-cards
+    *ngFor="let list of allCards$ | async; trackBy: listTrackBy"
+    [list]="list"
+    class="flex min-w-64 max-w-md grow basis-1"
+  ></app-list-of-cards>
+  <app-add-new-list class="min-w-64 max-w-md grow basis-1"></app-add-new-list>
+</div>
