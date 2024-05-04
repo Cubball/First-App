@@ -1,38 +1,29 @@
 using ErrorOr;
 using FluentValidation;
-using Microsoft.EntityFrameworkCore;
 using TaskBoard.BLL.Mapping;
 using TaskBoard.BLL.Models.CardState;
 using TaskBoard.BLL.Services.Interfaces;
-using TaskBoard.DAL.Data;
+using TaskBoard.DAL.Repositories.Interfaces;
 
 namespace TaskBoard.BLL.Services;
 
 public class HistoryService : IHistoryService
 {
-    private readonly TaskBoardDbContext _dbContext;
+    private readonly ICardStateRepository _cardStateRepository;
     private readonly IValidator<GetCardsChangesModel> _getCardsChangesModelValidator;
 
     public HistoryService(
-        TaskBoardDbContext dbContext,
+        ICardStateRepository cardStateRepository,
         IValidator<GetCardsChangesModel> getCardsChangesModelValidator)
     {
-        _dbContext = dbContext;
+        _cardStateRepository = cardStateRepository;
         _getCardsChangesModelValidator = getCardsChangesModelValidator;
     }
 
     public async Task<IEnumerable<CardChangeModel>> GetAllChangesByCardIdAsync(int id)
     {
-        var states = await _dbContext.CardStates
-            .Where(s => s.CardId == id)
-            .OrderByDescending(s => s.UpdatedAt)
-            .ToListAsync();
-        for (var i = 0; i < states.Count - 1; i++)
-        {
-            states[i].PreviousState = states[i + 1];
-        }
-
-        return states.Select(s => s.ToChangeModel()).ToList();
+        var states = await _cardStateRepository.GetOrderedWithPreviousStateByCardIdAsync(id);
+        return states.ConvertAll(s => s.ToChangeModel());
     }
 
     public async Task<ErrorOr<CardsChangesListModel>> GetCardChangesAsync(GetCardsChangesModel model)
@@ -44,14 +35,9 @@ public class HistoryService : IHistoryService
         }
 
         var skip = (model.Page - 1) * model.PageSize;
-        var states = await _dbContext.CardStates
-            .Include(s => s.PreviousState)
-            .OrderByDescending(s => s.UpdatedAt)
-            .Skip(skip)
-            .Take(model.PageSize)
-            .ToListAsync();
-        var cardChanges = states.Select(s => s.ToChangeModel()).ToList();
-        var totalItems = await _dbContext.CardStates.CountAsync();
+        var states = await _cardStateRepository.GetOrderedWithPreviousStateByBoardIdAsync(model.BoardId, skip, model.PageSize);
+        var cardChanges = states.ConvertAll(s => s.ToChangeModel());
+        var totalItems = await _cardStateRepository.GetCountByBoardIdAsync(model.BoardId);
         return new CardsChangesListModel()
         {
             PageSize = model.PageSize,

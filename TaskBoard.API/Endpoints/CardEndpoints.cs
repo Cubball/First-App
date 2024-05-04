@@ -9,11 +9,10 @@ public static class CardEndpoints
     public static void MapCardEndpoints(this IEndpointRouteBuilder app)
     {
         var group = app.MapGroup("/cards");
-        group.MapGet("", async (ICardService cardService) =>
+        group.MapGet("", (ICardService cardService) =>
         {
-            var result = await cardService.GetAllCardsAsync();
-            var response = result.ToAllCardsResponse();
-            return Results.Ok(response);
+            // TODO: remove
+            return Results.Ok();
         });
 
         group.MapGet("{id}", async (int id, ICardService cardService) =>

@@ -10,5 +10,7 @@ public interface ICardStateRepository
 
     Task<List<CardState>> GetOrderedWithPreviousStateByCardIdAsync(int cardId);
 
+    Task<int> GetCountByBoardIdAsync(int boardId);
+
     void Add(CardState cardState);
 }

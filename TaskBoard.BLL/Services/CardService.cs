@@ -1,30 +1,37 @@
 using ErrorOr;
 using FluentValidation;
-using Microsoft.EntityFrameworkCore;
 using TaskBoard.BLL.Infrastructure;
 using TaskBoard.BLL.Mapping;
 using TaskBoard.BLL.Models.Card;
-using TaskBoard.BLL.Models.List;
 using TaskBoard.BLL.Services.Interfaces;
-using TaskBoard.DAL.Data;
 using TaskBoard.DAL.Entities;
+using TaskBoard.DAL.Repositories.Interfaces;
 
 namespace TaskBoard.BLL.Services;
 
 public class CardService : ICardService
 {
-    private readonly TaskBoardDbContext _dbContext;
+    private readonly ICardRepository _cardRepository;
+    private readonly IListRepository _listRepository;
+    private readonly ICardStateRepository _cardStateRepository;
+    private readonly IUnitOfWork _unitOfWork;
     private readonly IValidator<CreateCardModel> _createCardValidator;
     private readonly IValidator<UpdateCardModel> _updateCardValidator;
     private readonly IDateTimeProvider _dateTimeProvider;
 
     public CardService(
-        TaskBoardDbContext dbContext,
+        ICardRepository cardRepository,
+        IListRepository listRepository,
+        ICardStateRepository cardStateRepository,
+        IUnitOfWork unitOfWork,
         IValidator<CreateCardModel> createCardValidator,
         IValidator<UpdateCardModel> updateCardValidator,
         IDateTimeProvider dateTimeProvider)
     {
-        _dbContext = dbContext;
+        _cardRepository = cardRepository;
+        _listRepository = listRepository;
+        _cardStateRepository = cardStateRepository;
+        _unitOfWork = unitOfWork;
         _createCardValidator = createCardValidator;
         _updateCardValidator = updateCardValidator;
         _dateTimeProvider = dateTimeProvider;
@@ -38,44 +45,42 @@ public class CardService : ICardService
             return validationResult.ToValidationErrors<CardFullModel>();
         }
 
-        var list = await _dbContext.Lists.FindAsync(cardModel.ListId);
+        var list = await _listRepository.GetByIdAsync(cardModel.ListId);
         if (list is null)
         {
             return Error.Validation(nameof(CreateCardModel.ListId), $"List with Id {cardModel.ListId} does not exist");
         }
 
         var card = cardModel.ToEntity();
-        using var transaction = await _dbContext.Database.BeginTransactionAsync();
+        await _unitOfWork.BeginTransactionAsync();
         try
         {
             await AddCardAndCardStateAsync(card, list);
-            await transaction.CommitAsync();
+            await _unitOfWork.CommitTransactionAsync();
             card.List = list;
             return card.ToFullModel();
         }
         catch
         {
-            await transaction.RollbackAsync();
+            await _unitOfWork.RollbackTransactionAsync();
             return Error.Failure();
         }
     }
 
     public async Task<ErrorOr<Deleted>> DeleteCardByIdAsync(int id)
     {
-        var card = await _dbContext.Cards
-            .Include(c => c.List)
-            .FirstOrDefaultAsync(c => c.Id == id);
+        var card = await _cardRepository.GetWithListByIdAsync(id);
         if (card is null)
         {
             return Error.NotFound();
         }
 
         var cardState = await CreateCardStateFromCardAsync(card, card.List, true);
-        _dbContext.Cards.Remove(card);
-        _dbContext.CardStates.Add(cardState);
+        _cardRepository.Remove(card);
+        _cardStateRepository.Add(cardState);
         try
         {
-            await _dbContext.SaveChangesAsync();
+            await _unitOfWork.SaveChangesAsync();
             return Result.Deleted;
         }
         catch
@@ -84,21 +89,9 @@ public class CardService : ICardService
         }
     }
 
-    public async Task<IEnumerable<ListWithCardsModel>> GetAllCardsAsync()
-    {
-        var listsWithCards = await _dbContext.Lists
-            .Include(l => l.Cards)
-            .ToListAsync();
-        var listModels = listsWithCards.Select(l => l.ToModelWithCards()).ToList();
-        listModels.ForEach(l => l.Cards.Sort((c1, c2) => c1.DueDate.CompareTo(c2.DueDate)));
-        return listModels;
-    }
-
     public async Task<ErrorOr<CardFullModel>> GetCardByIdAsync(int id)
     {
-        var card = await _dbContext.Cards
-            .Include(c => c.List)
-            .FirstOrDefaultAsync(c => c.Id == id);
+        var card = await _cardRepository.GetWithListByIdAsync(id);
         return card is null ? Error.NotFound() : card.ToFullModel();
     }
 
@@ -110,8 +103,7 @@ public class CardService : ICardService
             return validationResult.ToValidationErrors<Updated>();
         }
 
-        var card = await _dbContext.Cards
-            .FirstOrDefaultAsync(c => c.Id == cardModel.Id);
+        var card = await _cardRepository.GetWithListByIdAsync(cardModel.Id);
         if (card is null)
         {
             return Error.NotFound();
@@ -145,9 +137,7 @@ public class CardService : ICardService
 
     private async Task<CardState> CreateCardStateFromCardAsync(Card card, List list, bool deleted)
     {
-        var previousState = await _dbContext.CardStates
-            .OrderByDescending(cs => cs.UpdatedAt)
-            .FirstOrDefaultAsync(cs => cs.CardId == card.Id);
+        var previousState = await _cardStateRepository.GetLatestByCardIdAsync(card.Id);
         return new()
         {
             CardId = card.Id,
@@ -165,27 +155,32 @@ public class CardService : ICardService
 
     private async Task AddCardAndCardStateAsync(Card card, List list)
     {
-        _dbContext.Cards.Add(card);
-        await _dbContext.SaveChangesAsync();
+        _cardRepository.Add(card);
+        await _unitOfWork.SaveChangesAsync();
         var cardState = await CreateCardStateFromCardAsync(card, list, false);
-        _dbContext.CardStates.Add(cardState);
-        await _dbContext.SaveChangesAsync();
+        _cardStateRepository.Add(cardState);
+        await _unitOfWork.SaveChangesAsync();
     }
 
     private async Task<ErrorOr<Updated>> UpdateCardAndAddCardStateAsync(Card card, UpdateCardModel cardModel)
     {
-        var list = await _dbContext.Lists.FirstOrDefaultAsync(l => l.Id == cardModel.ListId);
+        var list = await _listRepository.GetByIdAsync(cardModel.ListId);
         if (list is null)
         {
-            return Error.Validation(nameof(CreateCardModel.ListId), $"List with Id {cardModel.ListId} does not exist");
+            return Error.Validation(nameof(UpdateCardModel.ListId), $"List with Id {cardModel.ListId} does not exist");
+        }
+
+        if (list.BoardId != card.List.BoardId)
+        {
+            return Error.Validation(nameof(UpdateCardModel.ListId), $"Cannot move card to list with Id {cardModel.ListId} since it's in a different board");
         }
 
         UpdateCardProperties(card, cardModel);
         var cardState = await CreateCardStateFromCardAsync(card, list, false);
-        _dbContext.CardStates.Add(cardState);
+        _cardStateRepository.Add(cardState);
         try
         {
-            await _dbContext.SaveChangesAsync();
+            await _unitOfWork.SaveChangesAsync();
             return Result.Updated;
         }
         catch

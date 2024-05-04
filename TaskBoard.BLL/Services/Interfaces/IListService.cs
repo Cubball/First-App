@@ -5,7 +5,7 @@ namespace TaskBoard.BLL.Services.Interfaces;
 
 public interface IListService
 {
-    Task<IEnumerable<ListModel>> GetAllListsAsync();
+    Task<IEnumerable<ListModel>> GetAllListsByBoardIdAsync(int boardId);
 
     Task<ErrorOr<ListModel>> GetListByIdAsync(int id);
 

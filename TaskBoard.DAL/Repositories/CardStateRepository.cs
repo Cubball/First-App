@@ -19,6 +19,13 @@ public class CardStateRepository : ICardStateRepository
         _dbContext.CardStates.Add(cardState);
     }
 
+    public Task<int> GetCountByBoardIdAsync(int boardId)
+    {
+        return _dbContext.CardStates
+            .Where(c => c.BoardId == boardId)
+            .CountAsync();
+    }
+
     public Task<CardState?> GetLatestByCardIdAsync(int cardId)
     {
         return _dbContext.CardStates

@@ -1,25 +1,27 @@
 using ErrorOr;
 using FluentValidation;
-using Microsoft.EntityFrameworkCore;
 using TaskBoard.BLL.Mapping;
 using TaskBoard.BLL.Models.List;
 using TaskBoard.BLL.Services.Interfaces;
-using TaskBoard.DAL.Data;
+using TaskBoard.DAL.Repositories.Interfaces;
 
 namespace TaskBoard.BLL.Services;
 
 public class ListService : IListService
 {
-    private readonly TaskBoardDbContext _dbContext;
+    private readonly IListRepository _listRepository;
+    private readonly IUnitOfWork _unitOfWork;
     private readonly IValidator<CreateListModel> _createListModelValidator;
     private readonly IValidator<UpdateListModel> _updateListModelValidator;
 
     public ListService(
-        TaskBoardDbContext dbContext,
+        IListRepository listRepository,
+        IUnitOfWork unitOfWork,
         IValidator<CreateListModel> createListModelValidator,
         IValidator<UpdateListModel> updateListModelValidator)
     {
-        _dbContext = dbContext;
+        _listRepository = listRepository;
+        _unitOfWork = unitOfWork;
         _createListModelValidator = createListModelValidator;
         _updateListModelValidator = updateListModelValidator;
     }
@@ -33,10 +35,10 @@ public class ListService : IListService
         }
 
         var list = listModel.ToEntity();
-        _dbContext.Add(list);
+        _listRepository.Add(list);
         try
         {
-            await _dbContext.SaveChangesAsync();
+            await _unitOfWork.SaveChangesAsync();
             return list.ToModel();
         }
         catch
@@ -47,16 +49,16 @@ public class ListService : IListService
 
     public async Task<ErrorOr<Deleted>> DeleteListByIdAsync(int id)
     {
-        var list = await _dbContext.Lists.FindAsync(id);
+        var list = await _listRepository.GetByIdAsync(id);
         if (list is null)
         {
             return Error.NotFound();
         }
 
-        _dbContext.Remove(list);
+        _listRepository.Remove(list);
         try
         {
-            await _dbContext.SaveChangesAsync();
+            await _unitOfWork.SaveChangesAsync();
             return Result.Deleted;
         }
         catch
@@ -65,15 +67,15 @@ public class ListService : IListService
         }
     }
 
-    public async Task<IEnumerable<ListModel>> GetAllListsAsync()
+    public async Task<IEnumerable<ListModel>> GetAllListsByBoardIdAsync(int boardId)
     {
-        var lists = await _dbContext.Lists.ToListAsync();
-        return lists.Select(l => l.ToModel()).ToList();
+        var lists = await _listRepository.GetByBoardIdAsync(boardId);
+        return lists.ConvertAll(l => l.ToModel());
     }
 
     public async Task<ErrorOr<ListModel>> GetListByIdAsync(int id)
     {
-        var list = await _dbContext.Lists.FindAsync(id);
+        var list = await _listRepository.GetByIdAsync(id);
         return list is null ? Error.NotFound() : list.ToModel();
     }
 
@@ -85,7 +87,7 @@ public class ListService : IListService
             return validationResult.ToValidationErrors<Updated>();
         }
 
-        var list = await _dbContext.Lists.FindAsync(listModel.Id);
+        var list = await _listRepository.GetByIdAsync(listModel.Id);
         if (list is null)
         {
             return Error.NotFound();
@@ -94,7 +96,7 @@ public class ListService : IListService
         list.Name = listModel.Name;
         try
         {
-            await _dbContext.SaveChangesAsync();
+            await _unitOfWork.SaveChangesAsync();
             return Result.Updated;
         }
         catch
