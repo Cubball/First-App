@@ -28,6 +28,7 @@ public static class ListMappingExtensions
         return new()
         {
             Name = model.Name,
+            BoardId = model.BoardId,
         };
     }
 }

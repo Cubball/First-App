@@ -68,6 +68,7 @@ public class DbInitializer
                 ListName = _board.Lists.First(l => l.Id == c.ListId).Name,
                 Deleted = false,
                 UpdatedAt = DateTime.UtcNow,
+                BoardId = _board.Id,
                 PreviousState = null,
                 PreviousStateId = null,
             })

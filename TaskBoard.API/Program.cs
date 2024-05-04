@@ -6,17 +6,27 @@ using TaskBoard.BLL.Infrastructure;
 using TaskBoard.BLL.Services;
 using TaskBoard.BLL.Services.Interfaces;
 using TaskBoard.DAL.Data;
+using TaskBoard.DAL.Repositories;
+using TaskBoard.DAL.Repositories.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<TaskBoardDbContext>(o => o.UseNpgsql(connectionString));
+builder.Services.AddScoped<DbInitializer>();
+builder.Services.AddScoped<ICardRepository, CardRepository>();
+builder.Services.AddScoped<IListRepository, ListRepository>();
+builder.Services.AddScoped<ICardStateRepository, CardStateRepository>();
+builder.Services.AddScoped<IBoardRepository, BoardRepository>();
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+
 builder.Services.AddSingleton<IDateTimeProvider, DateTimeProvider>();
 builder.Services.AddValidatorsFromAssemblyContaining<IAssemblyMarker>();
 builder.Services.AddScoped<ICardService, CardService>();
 builder.Services.AddScoped<IListService, ListService>();
 builder.Services.AddScoped<IHistoryService, HistoryService>();
-builder.Services.AddScoped<DbInitializer>();
+builder.Services.AddScoped<IBoardService, BoardService>();
+
 builder.Services.AddTransient<GlobalErrorHandlingMiddleware>();
 var allowedOrigins = builder.Configuration.GetSection("Cors:AllowedOrigins").Get<string[]>() ?? [];
 builder.Services.AddCors(
@@ -45,6 +55,6 @@ app.UseCors();
 
 app.MapCardEndpoints();
 app.MapListEndpoints();
-app.MapHistoryEndpoints();
+app.MapBoardEndpoints();
 
 app.Run();

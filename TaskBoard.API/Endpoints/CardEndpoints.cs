@@ -9,25 +9,25 @@ public static class CardEndpoints
     public static void MapCardEndpoints(this IEndpointRouteBuilder app)
     {
         var group = app.MapGroup("/cards");
-        group.MapGet("", (ICardService cardService) =>
-        {
-            // TODO: remove
-            return Results.Ok();
-        });
-
         group.MapGet("{id}", async (int id, ICardService cardService) =>
         {
             var result = await cardService.GetCardByIdAsync(id);
             return result.Match(
-                card => Results.Ok(card.ToFullResponse()),
+                card => Results.Ok(card.ToResponse()),
                 errors => errors.ToResponse());
+        });
+
+        group.MapGet("{id}/history", async (int id, IHistoryService historyService) =>
+        {
+            var result = await historyService.GetAllChangesByCardIdAsync(id);
+            return Results.Ok(result.ToResponse());
         });
 
         group.MapPost("", async (CreateCardRequest request, ICardService cardService) =>
         {
             var result = await cardService.CreateCardAsync(request.ToModel());
             return result.Match(
-                card => Results.Created($"/cards/{card.Id}", card),
+                card => Results.Created($"/cards/{card.Id}", card.ToResponse()),
                 errors => errors.ToResponse());
         });
 

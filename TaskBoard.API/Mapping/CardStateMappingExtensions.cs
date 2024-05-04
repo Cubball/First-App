@@ -40,7 +40,7 @@ public static class CardStateMappingExtensions
         };
     }
 
-    public static AllCardChangesResponse ToAllCardChangesResponse(this IEnumerable<CardChangeModel> changeModels)
+    public static AllCardChangesResponse ToResponse(this IEnumerable<CardChangeModel> changeModels)
     {
         return new() { Changes = changeModels.Select(c => c.ToResponse()) };
     }

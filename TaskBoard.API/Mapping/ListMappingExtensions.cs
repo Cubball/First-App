@@ -1,5 +1,4 @@
 using TaskBoard.API.Contracts.Requests.List;
-using TaskBoard.API.Contracts.Responses.Card;
 using TaskBoard.API.Contracts.Responses.List;
 using TaskBoard.BLL.Models.List;
 
@@ -7,19 +6,14 @@ namespace TaskBoard.API.Mapping;
 
 public static class ListMappingExtensions
 {
-    public static ListWithCardsResponse ToListWithCardsResponse(this ListWithCardsModel list)
+    public static ListWithCardsResponse ToResponse(this ListWithCardsModel list)
     {
         return new()
         {
             Id = list.List.Id,
             Name = list.List.Name,
-            Cards = list.Cards.Select(card => card.ToShortResponse()),
+            Cards = list.Cards.Select(card => card.ToResponse()),
         };
-    }
-
-    public static AllCardsResponse ToAllCardsResponse(this IEnumerable<ListWithCardsModel> lists)
-    {
-        return new() { Lists = lists.Select(l => l.ToListWithCardsResponse()) };
     }
 
     public static ListResponse ToResponse(this ListModel list)
@@ -31,7 +25,7 @@ public static class ListMappingExtensions
         };
     }
 
-    public static AllListsResponse ToAllListsResponse(this IEnumerable<ListModel> lists)
+    public static ListsInBoardResponse ToResponse(this IEnumerable<ListModel> lists)
     {
         return new() { Lists = lists.Select(l => l.ToResponse()) };
     }
@@ -41,6 +35,7 @@ public static class ListMappingExtensions
         return new()
         {
             Name = request.Name,
+            BoardId = request.BoardId,
         };
     }
 

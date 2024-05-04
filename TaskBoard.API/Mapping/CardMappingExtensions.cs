@@ -6,7 +6,7 @@ namespace TaskBoard.API.Mapping;
 
 public static class CardMappingExtensions
 {
-    public static CardShortResponse ToShortResponse(this CardShortModel cardModel)
+    public static CardShortResponse ToResponse(this CardShortModel cardModel)
     {
         return new()
         {
@@ -18,7 +18,7 @@ public static class CardMappingExtensions
         };
     }
 
-    public static CardFullResponse ToFullResponse(this CardFullModel cardModel)
+    public static CardFullResponse ToResponse(this CardFullModel cardModel)
     {
         return new()
         {

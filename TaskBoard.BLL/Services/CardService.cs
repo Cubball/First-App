@@ -150,6 +150,7 @@ public class CardService : ICardService
             UpdatedAt = _dateTimeProvider.UtcNow,
             Deleted = deleted,
             PreviousState = previousState,
+            BoardId = list.BoardId,
         };
     }
 

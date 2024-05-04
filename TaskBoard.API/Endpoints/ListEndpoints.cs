@@ -9,11 +9,6 @@ public static class ListEndpoints
     public static void MapListEndpoints(this IEndpointRouteBuilder app)
     {
         var group = app.MapGroup("/lists");
-        group.MapGet("", (IListService listService) =>
-        {
-            return Results.Ok();
-        });
-
         group.MapGet("{id}", async (int id, IListService listService) =>
         {
             var result = await listService.GetListByIdAsync(id);
