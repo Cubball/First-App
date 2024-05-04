@@ -3,6 +3,7 @@ using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using TaskBoard.BLL.Mapping;
 using TaskBoard.BLL.Models.List;
+using TaskBoard.BLL.Services.Interfaces;
 using TaskBoard.DAL.Data;
 
 namespace TaskBoard.BLL.Services;

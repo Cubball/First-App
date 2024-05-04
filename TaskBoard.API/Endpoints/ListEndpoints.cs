@@ -1,6 +1,6 @@
 using TaskBoard.API.Contracts.Requests.List;
 using TaskBoard.API.Mapping;
-using TaskBoard.BLL.Services;
+using TaskBoard.BLL.Services.Interfaces;
 
 namespace TaskBoard.API.Endpoints;
 

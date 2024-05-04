@@ -1,7 +1,7 @@
 using ErrorOr;
 using TaskBoard.BLL.Models.CardState;
 
-namespace TaskBoard.BLL.Services;
+namespace TaskBoard.BLL.Services.Interfaces;
 
 public interface IHistoryService
 {

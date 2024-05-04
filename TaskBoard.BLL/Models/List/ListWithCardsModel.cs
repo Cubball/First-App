@@ -1,6 +1,6 @@
-using TaskBoard.BLL.Models.List;
+using TaskBoard.BLL.Models.Card;
 
-namespace TaskBoard.BLL.Models.Card;
+namespace TaskBoard.BLL.Models.List;
 
 public class ListWithCardsModel
 {

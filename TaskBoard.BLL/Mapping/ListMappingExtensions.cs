@@ -1,4 +1,3 @@
-using TaskBoard.BLL.Models.Card;
 using TaskBoard.BLL.Models.List;
 using TaskBoard.DAL.Entities;
 

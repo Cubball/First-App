@@ -1,7 +1,8 @@
 using ErrorOr;
 using TaskBoard.BLL.Models.Card;
+using TaskBoard.BLL.Models.List;
 
-namespace TaskBoard.BLL.Services;
+namespace TaskBoard.BLL.Services.Interfaces;
 
 public interface ICardService
 {

@@ -4,6 +4,7 @@ using TaskBoard.API.Endpoints;
 using TaskBoard.API.Middleware;
 using TaskBoard.BLL.Infrastructure;
 using TaskBoard.BLL.Services;
+using TaskBoard.BLL.Services.Interfaces;
 using TaskBoard.DAL.Data;
 
 var builder = WebApplication.CreateBuilder(args);

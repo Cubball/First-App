@@ -3,6 +3,7 @@ using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using TaskBoard.BLL.Mapping;
 using TaskBoard.BLL.Models.CardState;
+using TaskBoard.BLL.Services.Interfaces;
 using TaskBoard.DAL.Data;
 
 namespace TaskBoard.BLL.Services;

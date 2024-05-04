@@ -4,6 +4,8 @@ using Microsoft.EntityFrameworkCore;
 using TaskBoard.BLL.Infrastructure;
 using TaskBoard.BLL.Mapping;
 using TaskBoard.BLL.Models.Card;
+using TaskBoard.BLL.Models.List;
+using TaskBoard.BLL.Services.Interfaces;
 using TaskBoard.DAL.Data;
 using TaskBoard.DAL.Entities;
 
