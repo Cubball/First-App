@@ -13,6 +13,8 @@ public class TaskBoardDbContext : DbContext
 
     public DbSet<CardState> CardStates { get; set; } = default!;
 
+    public DbSet<Board> Boards { get; set; } = default!;
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Card>()
@@ -37,6 +39,10 @@ public class TaskBoardDbContext : DbContext
         modelBuilder.Entity<List>()
             .Property(l => l.Name)
             .HasMaxLength(100);
+        modelBuilder.Entity<List>()
+            .HasOne(l => l.Board)
+            .WithMany(b => b.Lists)
+            .HasForeignKey(l => l.BoardId);
 
         modelBuilder.Entity<CardState>()
             .HasKey(c => c.Id);
@@ -49,5 +55,15 @@ public class TaskBoardDbContext : DbContext
         modelBuilder.Entity<CardState>()
             .Property(c => c.Priority)
             .HasMaxLength(50);
+        modelBuilder.Entity<CardState>()
+            .HasOne(c => c.Board)
+            .WithMany()
+            .HasForeignKey(c => c.BoardId);
+
+        modelBuilder.Entity<Board>()
+            .HasKey(b => b.Id);
+        modelBuilder.Entity<Board>()
+            .Property(b => b.Name)
+            .HasMaxLength(100);
     }
 }

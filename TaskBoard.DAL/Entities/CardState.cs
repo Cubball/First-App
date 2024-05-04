@@ -25,4 +25,8 @@ public class CardState
     public int? PreviousStateId { get; set; }
 
     public CardState? PreviousState { get; set; }
+
+    public int BoardId { get; set; }
+
+    public Board Board { get; set; } = default!;
 }
