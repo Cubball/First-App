@@ -3,8 +3,18 @@ import { CardDetailsComponent } from './components/pages/board-page/card-details
 import { AddEditCardComponent } from './components/pages/board-page/add-edit-card/add-edit-card.component';
 import { HistorySidebarComponent } from './components/pages/board-page/history-sidebar/history-sidebar.component';
 import { TaskBoardComponent } from './components/pages/board-page/task-board/task-board.component';
+import { AddEditBoardComponent } from './components/pages/add-edit-board/add-edit-board.component';
+import { RedirectToBoardComponent } from './components/pages/redirect-to-board/redirect-to-board.component';
 
 export const routes: Routes = [
+  {
+    path:'boards/:boardId/edit',
+    component: AddEditBoardComponent
+  },
+  {
+    path: 'boards/new',
+    component: AddEditBoardComponent,
+  },
   {
     path: 'boards/:boardId',
     component: TaskBoardComponent,
@@ -27,4 +37,8 @@ export const routes: Routes = [
       },
     ],
   },
+  {
+    path: '',
+    component: RedirectToBoardComponent,
+  }
 ];

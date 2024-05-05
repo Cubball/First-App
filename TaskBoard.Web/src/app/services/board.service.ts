@@ -2,8 +2,9 @@ import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { BoardWithLists } from '../types/shared/board-with-lists';
-import { BehaviorSubject, Observable, map } from 'rxjs';
+import { BehaviorSubject, Observable, map, tap } from 'rxjs';
 import { Board } from '../types/shared/board';
+import { CreateUpdateBoard } from '../types/requests/create-update-board';
 
 @Injectable({
   providedIn: 'root',
@@ -25,6 +26,24 @@ export class BoardService {
   getAllBoards(): Observable<Board[]> {
     this.fetchBoards();
     return this.boardsSubject.asObservable();
+  }
+
+  addBoard(board: CreateUpdateBoard): Observable<Board> {
+    return this.httpClient
+      .post<Board>(this.boardsEndpoint, board)
+      .pipe(tap((_) => this.fetchBoards()));
+  }
+
+  updateBoard(id: number, board: CreateUpdateBoard): Observable<void> {
+    return this.httpClient
+      .put<void>(`${this.boardsEndpoint}/${id}`, board)
+      .pipe(tap((_) => this.fetchBoards()));
+  }
+
+  deleteBoard(id: number): Observable<void> {
+    return this.httpClient
+      .delete<void>(`${this.boardsEndpoint}/${id}`)
+      .pipe(tap(() => this.fetchBoards()));
   }
 
   fetchBoard(id: number): void {
