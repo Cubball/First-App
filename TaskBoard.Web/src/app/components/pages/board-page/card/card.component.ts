@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { CardInList } from '../../../types/shared/card-in-list';
+import { CardInList } from '../../../../types/shared/card-in-list';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import {
   faEllipsisVertical,
@@ -8,14 +8,14 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { faCalendar } from '@fortawesome/free-regular-svg-icons';
 import { CommonModule } from '@angular/common';
-import { CardService } from '../../../services/card.service';
-import { EditDeleteMenuComponent } from '../../shared/edit-delete-menu/edit-delete-menu.component';
-import { ListService } from '../../../services/list.service';
-import { List } from '../../../types/shared/list';
+import { CardService } from '../../../../services/card.service';
+import { EditDeleteMenuComponent } from '../../../shared/edit-delete-menu/edit-delete-menu.component';
+import { ListService } from '../../../../services/list.service';
+import { List } from '../../../../types/shared/list';
 import { Observable } from 'rxjs';
-import { Router, RouterLink } from '@angular/router';
-import { EllipsisPipe } from '../../../pipes/ellipsis.pipe';
-import { ToastService } from '../../../services/toast.service';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { EllipsisPipe } from '../../../../pipes/ellipsis.pipe';
+import { ToastService } from '../../../../services/toast.service';
 
 @Component({
   selector: 'app-card',
@@ -30,6 +30,8 @@ import { ToastService } from '../../../services/toast.service';
   templateUrl: './card.component.html',
 })
 export class CardComponent {
+  private boardId: number;
+
   faEllipsisVertical = faEllipsisVertical;
   faCalendar = faCalendar;
   faChevronDown = faChevronDown;
@@ -43,8 +45,10 @@ export class CardComponent {
     private listService: ListService,
     private toastService: ToastService,
     private router: Router,
+    private activatedRoute: ActivatedRoute,
   ) {
-    this.availableLists$ = this.listService.getAllLists();
+    this.boardId = this.activatedRoute.snapshot.params['boardId'];
+    this.availableLists$ = this.listService.getAllLists(this.boardId);
   }
 
   onMoveToClick(selectedId: number): void {
@@ -52,7 +56,7 @@ export class CardComponent {
       .updateCard(this.card.id, {
         ...this.card,
         listId: selectedId,
-      })
+      }, this.boardId)
       .subscribe({
         next: () => this.toastService.addToast('Card moved!', 'Success'),
         error: () =>
@@ -61,11 +65,11 @@ export class CardComponent {
   }
 
   onEditClick(): void {
-    this.router.navigate(['cards', this.card.id, 'edit']);
+    this.router.navigate(['cards', this.card.id, 'edit'], { relativeTo: this.activatedRoute });
   }
 
   onDeleteClick(): void {
-    this.cardService.deleteCard(this.card.id).subscribe({
+    this.cardService.deleteCard(this.card.id, this.boardId).subscribe({
       next: () => this.toastService.addToast('Card deleted!', 'Success'),
       error: () =>
         this.toastService.addToast('Failed to delete the card', 'Error'),

@@ -3,8 +3,9 @@ import { environment } from '../../environments/environment';
 import { BehaviorSubject, Observable, map, tap } from 'rxjs';
 import { List } from '../types/shared/list';
 import { HttpClient } from '@angular/common/http';
-import { CreateUpdateList } from '../types/requests/create-update-list';
-import { CardService } from './card.service';
+import { UpdateList } from '../types/requests/update-list';
+import { BoardService } from './board.service';
+import { CreateList } from '../types/requests/create-list';
 
 @Injectable({
   providedIn: 'root',
@@ -15,45 +16,54 @@ export class ListService {
 
   constructor(
     private httpClient: HttpClient,
-    private cardService: CardService,
-  ) {
-    this.fetchLists();
-  }
+    private boardService: BoardService,
+  ) {}
 
-  getAllLists(): Observable<List[]> {
+  getAllLists(boardId: number): Observable<List[]> {
+    this.fetchLists(boardId);
     return this.lists.asObservable();
   }
 
-  addList(list: CreateUpdateList): Observable<void> {
+  addList(list: CreateList, boardId: number): Observable<void> {
     return this.httpClient.post<void>(this.listsEndpoint, list).pipe(
       tap(() => {
-        this.fetchLists();
-        this.cardService.refetchCards();
+        this.fetchLists(boardId);
+        this.boardService.fetchBoard(boardId);
       }),
     );
   }
 
-  updateList(id: number, list: CreateUpdateList): Observable<void> {
+  updateList(
+    id: number,
+    list: UpdateList,
+    boardId: number,
+  ): Observable<void> {
     return this.httpClient.put<void>(`${this.listsEndpoint}/${id}`, list).pipe(
       tap(() => {
-        this.fetchLists();
-        this.cardService.refetchCards();
+        this.fetchLists(boardId);
+        this.boardService.fetchBoard(boardId);
       }),
     );
   }
 
-  deleteList(id: number): Observable<void> {
+  deleteList(id: number, boardId: number): Observable<void> {
     return this.httpClient.delete<void>(`${this.listsEndpoint}/${id}`).pipe(
       tap(() => {
-        this.fetchLists();
-        this.cardService.refetchCards();
+        this.fetchLists(boardId);
+        this.boardService.fetchBoard(boardId);
       }),
     );
   }
 
-  private fetchLists(): void {
+  private fetchLists(boardId: number): void {
+    if (!boardId) {
+      return;
+    }
+
     this.httpClient
-      .get<{ lists: List[] }>(this.listsEndpoint)
+      .get<{ lists: List[] }>(
+        `${environment.apiBaseUrl}/boards/${boardId}/lists`,
+      )
       .pipe(map((response) => response.lists))
       .subscribe((response) => this.lists.next(response));
   }

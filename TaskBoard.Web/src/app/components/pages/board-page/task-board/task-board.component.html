@@ -1,0 +1,23 @@
+<ng-container *ngIf="board$ | async as board">
+  <hr class="mb-3" />
+  <div class="flex justify-between pb-3">
+    <h2 class="text-2xl font-bold md:text-4xl">{{ board.name }}</h2>
+    <!-- TODO: edit delete menu  -->
+    <button
+      class="text-md h-fit rounded-md border border-gray-300 px-2 py-1 font-medium md:px-4 md:py-2 md:text-xl"
+      routerLink="history"
+    >
+      <fa-icon [icon]="faArrowRotateLeft" class="mr-1"></fa-icon>
+      History
+    </button>
+  </div>
+  <div class="flex min-h-0 justify-start gap-5 overflow-x-auto">
+    <app-list-of-cards
+      *ngFor="let list of board.lists; trackBy: listTrackBy"
+      [list]="list"
+      class="flex min-w-64 max-w-md grow basis-1"
+    ></app-list-of-cards>
+    <app-add-new-list class="min-w-64 max-w-md grow basis-1"></app-add-new-list>
+  </div>
+  <router-outlet></router-outlet>
+</ng-container>

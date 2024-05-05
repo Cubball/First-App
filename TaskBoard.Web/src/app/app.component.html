@@ -1,11 +1,7 @@
 <div class="flex max-h-screen flex-col overflow-y-hidden p-5 text-gray-900">
   <app-header></app-header>
-  <app-task-board
-    class="flex overflow-x-auto"
-    style="scrollbar-width: none"
-  ></app-task-board>
+  <router-outlet></router-outlet>
 </div>
-<router-outlet></router-outlet>
 <div class="absolute bottom-0 right-0 z-50 overflow-hidden">
   <app-toast-notifications></app-toast-notifications>
 </div>

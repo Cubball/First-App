@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { ModalComponent } from '../shared/modal/modal.component';
+import { ModalComponent } from '../../../shared/modal/modal.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import {
   faXmark,
@@ -10,17 +10,17 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { faPenToSquare, faCalendar } from '@fortawesome/free-regular-svg-icons';
 import { ActivatedRoute, RouterLink } from '@angular/router';
-import { CardService } from '../../services/card.service';
-import { Card } from '../../types/shared/card';
+import { CardService } from '../../../../services/card.service';
+import { Card } from '../../../../types/shared/card';
 import { Observable } from 'rxjs';
 import { CommonModule } from '@angular/common';
-import { ListService } from '../../services/list.service';
-import { List } from '../../types/shared/list';
-import { HistoryService } from '../../services/history.service';
-import { CardChange } from '../../types/shared/card-change';
-import { CardChangeComponent } from '../shared/card-change/card-change.component';
-import { CardChangesFormatterService } from '../../services/card-changes-formatter.service';
-import { ToastService } from '../../services/toast.service';
+import { ListService } from '../../../../services/list.service';
+import { List } from '../../../../types/shared/list';
+import { HistoryService } from '../../../../services/history.service';
+import { CardChange } from '../../../../types/shared/card-change';
+import { CardChangeComponent } from '../../../shared/card-change/card-change.component';
+import { CardChangesFormatterService } from '../../../../services/card-changes-formatter.service';
+import { ToastService } from '../../../../services/toast.service';
 
 @Component({
   selector: 'app-card-details',
@@ -35,6 +35,8 @@ import { ToastService } from '../../services/toast.service';
   templateUrl: './card-details.component.html',
 })
 export class CardDetailsComponent {
+  private boardId: number;
+
   faXmark = faXmark;
   faPenToSquare = faPenToSquare;
   faListUl = faListUl;
@@ -48,19 +50,20 @@ export class CardDetailsComponent {
   lists$: Observable<List[]>;
 
   constructor(
-    private activatedRoute: ActivatedRoute,
     private cardService: CardService,
     private listService: ListService,
     private historyService: HistoryService,
     private toastService: ToastService,
     public cardChangesFormatter: CardChangesFormatterService,
+    private activatedRoute: ActivatedRoute,
   ) {
     const cardId = this.activatedRoute.snapshot.params['id'];
+    this.boardId = this.activatedRoute.snapshot.parent?.params['boardId'];
+    this.lists$ = this.listService.getAllLists(this.boardId);
+    this.changes$ = this.historyService.getAllChangesForCard(cardId);
     this.cardService
       .getCardById(cardId)
       .subscribe((card) => (this.card = card));
-    this.lists$ = this.listService.getAllLists();
-    this.changes$ = this.historyService.getAllChangesForCard(cardId);
   }
 
   listTrackBy(_: number, list: List) {
@@ -80,7 +83,7 @@ export class CardDetailsComponent {
       .updateCard(this.card.id, {
         ...this.card,
         listId: Number(listId),
-      })
+      }, this.boardId)
       .subscribe({
         next: () => {
           this.toastService.addToast('Card moved!', 'Success');

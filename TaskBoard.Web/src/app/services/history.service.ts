@@ -9,22 +9,27 @@ import { CardChangesList } from '../types/shared/card-changes-list';
   providedIn: 'root',
 })
 export class HistoryService {
-  private readonly historyEndpoint = `${environment.apiBaseUrl}/history`;
-
-  constructor(private httpClient: HttpClient) {}
+  constructor(
+    private httpClient: HttpClient,
+  ) {}
 
   getAllChangesForCard(cardId: number): Observable<CardChange[]> {
     return this.httpClient
-      .get<{ changes: CardChange[] }>(`${this.historyEndpoint}/${cardId}`)
+      .get<{
+        changes: CardChange[];
+      }>(`${environment.apiBaseUrl}/cards/${cardId}/history`)
       .pipe(map((response) => response.changes));
   }
 
-  getAllChanges(page: number, pageSize: number): Observable<CardChangesList> {
-    return this.httpClient.get<CardChangesList>(this.historyEndpoint, {
-      params: new HttpParams().appendAll({
-        page,
-        pageSize,
-      }),
-    });
+  getAllChanges(boardId: number, page: number, pageSize: number): Observable<CardChangesList> {
+    return this.httpClient.get<CardChangesList>(
+      `${environment.apiBaseUrl}/boards/${boardId}/history`,
+      {
+        params: new HttpParams().appendAll({
+          page,
+          pageSize,
+        }),
+      },
+    );
   }
 }

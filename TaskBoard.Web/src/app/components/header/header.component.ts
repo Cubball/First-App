@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { faArrowRotateLeft } from '@fortawesome/free-solid-svg-icons';
+import { faChevronDown, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { RouterLink } from '@angular/router';
 
@@ -10,5 +10,6 @@ import { RouterLink } from '@angular/router';
   templateUrl: './header.component.html',
 })
 export class HeaderComponent {
-  faArrowRotateLeft = faArrowRotateLeft;
+  faPlus = faPlus;
+  faChevronDown = faChevronDown;
 }
