@@ -5,11 +5,16 @@ import { HistorySidebarComponent } from './components/pages/board-page/history-s
 import { TaskBoardComponent } from './components/pages/board-page/task-board/task-board.component';
 import { AddEditBoardComponent } from './components/pages/add-edit-board/add-edit-board.component';
 import { RedirectToBoardComponent } from './components/pages/redirect-to-board/redirect-to-board.component';
+import { provideState } from '@ngrx/store';
+import {
+  currentBoardFeatureKey,
+  currentBoardReducer,
+} from './store/current-board/reducers';
 
 export const routes: Routes = [
   {
-    path:'boards/:boardId/edit',
-    component: AddEditBoardComponent
+    path: 'boards/:boardId/edit',
+    component: AddEditBoardComponent,
   },
   {
     path: 'boards/new',
@@ -18,6 +23,7 @@ export const routes: Routes = [
   {
     path: 'boards/:boardId',
     component: TaskBoardComponent,
+    providers: [provideState(currentBoardFeatureKey, currentBoardReducer)],
     children: [
       {
         path: 'cards/new/:listId',
@@ -40,5 +46,5 @@ export const routes: Routes = [
   {
     path: '',
     component: RedirectToBoardComponent,
-  }
+  },
 ];

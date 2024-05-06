@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { BoardService } from '../../../services/board.service';
+import { Store } from '@ngrx/store';
+import { selectBoardsState } from '../../../store/boards/reducers';
 
 @Component({
   selector: 'app-redirect-to-board',
@@ -10,10 +11,14 @@ import { BoardService } from '../../../services/board.service';
 })
 export class RedirectToBoardComponent {
   constructor(
-    private boardService: BoardService,
+    private store: Store,
     private router: Router,
   ) {
-    this.boardService.getAllBoards().subscribe((boards) => {
+    this.store.select(selectBoardsState).subscribe((boards) => {
+      if (!boards) {
+        return;
+      }
+
       if (boards.length > 0) {
         this.router.navigate(['/boards', boards[0].id]);
       } else {

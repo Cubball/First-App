@@ -10,7 +10,6 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { BoardWithLists } from '../../../../types/shared/board-with-lists';
-import { BoardService } from '../../../../services/board.service';
 import {
   ActivatedRoute,
   Router,
@@ -19,6 +18,10 @@ import {
 } from '@angular/router';
 import { EditDeleteMenuComponent } from '../../../shared/edit-delete-menu/edit-delete-menu.component';
 import { ToastService } from '../../../../services/toast.service';
+import { Store } from '@ngrx/store';
+import { selectCurrentBoardState } from '../../../../store/current-board/reducers';
+import { boardActions } from '../../../../store/boards/actions';
+import { currentBoardActions } from '../../../../store/current-board/actions';
 
 @Component({
   selector: 'app-task-board',
@@ -38,7 +41,7 @@ import { ToastService } from '../../../../services/toast.service';
   },
 })
 export class TaskBoardComponent {
-  private boardId: number;
+  private boardId!: number;
 
   faArrowRotateLeft = faArrowRotateLeft;
   faEllipsisVertical = faEllipsisVertical;
@@ -46,16 +49,14 @@ export class TaskBoardComponent {
   board$: Observable<BoardWithLists>;
 
   constructor(
-    private boardService: BoardService,
-    private toastService: ToastService,
+    private store: Store,
     private router: Router,
     private activatedRoute: ActivatedRoute,
   ) {
-    this.boardId = this.activatedRoute.snapshot.params['boardId'];
-    this.board$ = this.boardService.getBoardWithLists(this.boardId);
+    this.board$ = this.store.select(selectCurrentBoardState);
     this.activatedRoute.params.subscribe((params) => {
-      this.boardId = params['boardId'];
-      this.board$ = this.boardService.getBoardWithLists(this.boardId);
+      this.boardId = Number(params['boardId']);
+      this.store.dispatch(currentBoardActions.load({ id: this.boardId }));
     });
   }
 
@@ -68,13 +69,6 @@ export class TaskBoardComponent {
   }
 
   onDeleteClick() {
-    this.boardService.deleteBoard(this.boardId).subscribe({
-      next: () => {
-        this.toastService.addToast('Board deleted!', 'Success');
-        this.router.navigate(['/']);
-      },
-      error: () =>
-        this.toastService.addToast('Failed to delete the board', 'Error'),
-    });
+    this.store.dispatch(boardActions.delete({ id: this.boardId }));
   }
 }

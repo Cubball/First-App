@@ -4,7 +4,6 @@ import { BehaviorSubject, Observable, map, tap } from 'rxjs';
 import { List } from '../types/shared/list';
 import { HttpClient } from '@angular/common/http';
 import { UpdateList } from '../types/requests/update-list';
-import { BoardService } from './board.service';
 import { CreateList } from '../types/requests/create-list';
 
 @Injectable({
@@ -16,7 +15,6 @@ export class ListService {
 
   constructor(
     private httpClient: HttpClient,
-    private boardService: BoardService,
   ) {}
 
   getAllLists(boardId: number): Observable<List[]> {
@@ -28,7 +26,6 @@ export class ListService {
     return this.httpClient.post<void>(this.listsEndpoint, list).pipe(
       tap(() => {
         this.fetchLists(boardId);
-        this.boardService.fetchBoard(boardId);
       }),
     );
   }
@@ -41,7 +38,6 @@ export class ListService {
     return this.httpClient.put<void>(`${this.listsEndpoint}/${id}`, list).pipe(
       tap(() => {
         this.fetchLists(boardId);
-        this.boardService.fetchBoard(boardId);
       }),
     );
   }
@@ -50,7 +46,6 @@ export class ListService {
     return this.httpClient.delete<void>(`${this.listsEndpoint}/${id}`).pipe(
       tap(() => {
         this.fetchLists(boardId);
-        this.boardService.fetchBoard(boardId);
       }),
     );
   }

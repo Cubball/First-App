@@ -1,10 +1,13 @@
 import { Component } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
-import { BoardService } from '../../../services/board.service';
 import { ToastService } from '../../../services/toast.service';
 import { Location } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormButtonComponent } from '../../shared/form-button/form-button.component';
+import { Store } from '@ngrx/store';
+import { boardActions } from '../../../store/boards/actions';
+import { currentBoardActions } from '../../../store/current-board/actions';
+import { selectCurrentBoardState } from '../../../store/current-board/reducers';
 
 @Component({
   selector: 'app-add-edit-board',
@@ -21,15 +24,14 @@ export class AddEditBoardComponent {
   inputControl = new FormControl('');
 
   constructor(
-    private boardService: BoardService,
-    private toastService: ToastService,
+    private store: Store,
     private activatedRoute: ActivatedRoute,
     private location: Location,
-    private router: Router,
   ) {
-    this.boardId = this.activatedRoute.snapshot.params['boardId'];
+    this.boardId = Number(this.activatedRoute.snapshot.params['boardId']);
     if (this.boardId) {
-      this.boardService.getBoardWithLists(this.boardId).subscribe((board) => {
+      this.store.dispatch(currentBoardActions.load({ id: this.boardId }));
+      this.store.select(selectCurrentBoardState).subscribe((board) => {
         this.inputControl.setValue(board.name);
       });
     }
@@ -48,34 +50,16 @@ export class AddEditBoardComponent {
   }
 
   private addBoard() {
-    this.boardService
-      .addBoard({
-        name: this.inputControl.value ?? '',
-      })
-      .subscribe({
-        next: (board) => {
-          this.toastService.addToast('Board added!', 'Success');
-          this.router.navigate(['/boards', board.id]);
-        },
-        error: () => {
-          this.toastService.addToast('Failed to add the board', 'Error');
-        },
-      });
+    this.store.dispatch(
+      boardActions.add({ board: { name: this.inputControl.value ?? '' } }),
+    );
   }
 
   private updateBoard() {
-    this.boardService
-      .updateBoard(this.boardId!, {
-        name: this.inputControl.value ?? '',
-      })
-      .subscribe({
-        next: () => {
-          this.toastService.addToast('Board updated!', 'Success');
-          this.router.navigate(['/boards', this.boardId]);
-        },
-        error: () => {
-          this.toastService.addToast('Failed to update the board', 'Error');
-        },
-      });
+    this.store.dispatch(
+      boardActions.update({
+        board: { id: this.boardId!, name: this.inputControl.value ?? '' },
+      }),
+    );
   }
 }
