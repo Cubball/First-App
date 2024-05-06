@@ -1,6 +1,7 @@
 import { Priority } from "../shared/priority";
 
-export interface CreateUpdateCard {
+export interface UpdateCard {
+  id: number;
   name: string;
   description: string;
   dueDate: string;

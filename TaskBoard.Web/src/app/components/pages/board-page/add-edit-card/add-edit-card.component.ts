@@ -7,7 +7,6 @@ import {
 } from '@angular/forms';
 import { ModalComponent } from '../../../shared/modal/modal.component';
 import { ActivatedRoute } from '@angular/router';
-import { CardService } from '../../../../services/card.service';
 import {
   ALLOWED_PRIORITIES,
   Priority,
@@ -24,9 +23,13 @@ import { Observable } from 'rxjs';
 import { List } from '../../../../types/shared/list';
 import { ListService } from '../../../../services/list.service';
 import { FormButtonComponent } from '../../../shared/form-button/form-button.component';
-import { CreateUpdateCard } from '../../../../types/requests/create-update-card';
 import { ToastService } from '../../../../services/toast.service';
 import { Card } from '../../../../types/shared/card';
+import { CreateCard } from '../../../../types/requests/create-card';
+import { UpdateCard } from '../../../../types/requests/update-card';
+import { Store } from '@ngrx/store';
+import { cardActions } from '../../../../store/card/actions';
+import { selectCardState } from '../../../../store/card/reducers';
 
 @Component({
   selector: 'app-add-edit-card',
@@ -64,7 +67,7 @@ export class AddEditCardComponent {
   });
 
   constructor(
-    private cardService: CardService,
+    private store: Store,
     private listService: ListService,
     private toastService: ToastService,
     private activatedRoute: ActivatedRoute,
@@ -89,10 +92,11 @@ export class AddEditCardComponent {
       return;
     }
 
-    const card = this.getCardFromFormGroup(this.formGroup);
     if (this.cardId) {
+      const card = this.getUpdateCardFromFormGroup(this.formGroup);
       this.updateCard(card);
     } else {
+      const card = this.getCreateCardFromFormGroup(this.formGroup);
       this.addCard(card);
     }
 
@@ -101,7 +105,8 @@ export class AddEditCardComponent {
 
   private initializeForm() {
     if (this.cardId) {
-      this.cardService.getCardById(this.cardId).subscribe((card) => {
+      this.store.dispatch(cardActions.load({ id: this.cardId }));
+      this.store.select(selectCardState).subscribe((card) => {
         this.formGroup = this.getFormGroupFromCard(card);
       });
     } else {
@@ -137,7 +142,7 @@ export class AddEditCardComponent {
     });
   }
 
-  private getCardFromFormGroup(formGroup: FormGroup): CreateUpdateCard {
+  private getCreateCardFromFormGroup(formGroup: FormGroup): CreateCard {
     return {
       name: formGroup.value.name!,
       description: formGroup.value.description!,
@@ -149,19 +154,18 @@ export class AddEditCardComponent {
     };
   }
 
-  private addCard(card: CreateUpdateCard): void {
-    this.cardService.addCard(card, this.boardId).subscribe({
-      next: () => this.toastService.addToast('Card added!', 'Success'),
-      error: () =>
-        this.toastService.addToast('Failed to add the card', 'Error'),
-    });
+  private getUpdateCardFromFormGroup(formGroup: FormGroup): UpdateCard {
+    return {
+      ...this.getCreateCardFromFormGroup(formGroup),
+      id: this.cardId,
+    };
   }
 
-  private updateCard(card: CreateUpdateCard) {
-    this.cardService.updateCard(this.cardId, card, this.boardId).subscribe({
-      next: () => this.toastService.addToast('Card updated!', 'Success'),
-      error: () =>
-        this.toastService.addToast('Failed to update the card', 'Error'),
-    });
+  private addCard(card: CreateCard): void {
+    this.store.dispatch(cardActions.add({ card }));
+  }
+
+  private updateCard(card: UpdateCard) {
+    this.store.dispatch(cardActions.update({ card }));
   }
 }

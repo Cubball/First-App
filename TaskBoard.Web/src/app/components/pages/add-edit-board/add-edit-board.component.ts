@@ -1,8 +1,7 @@
 import { Component } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
-import { ToastService } from '../../../services/toast.service';
 import { Location } from '@angular/common';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { FormButtonComponent } from '../../shared/form-button/form-button.component';
 import { Store } from '@ngrx/store';
 import { boardActions } from '../../../store/boards/actions';

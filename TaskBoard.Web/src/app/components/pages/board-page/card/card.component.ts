@@ -8,14 +8,14 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { faCalendar } from '@fortawesome/free-regular-svg-icons';
 import { CommonModule } from '@angular/common';
-import { CardService } from '../../../../services/card.service';
 import { EditDeleteMenuComponent } from '../../../shared/edit-delete-menu/edit-delete-menu.component';
 import { ListService } from '../../../../services/list.service';
 import { List } from '../../../../types/shared/list';
 import { Observable } from 'rxjs';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { EllipsisPipe } from '../../../../pipes/ellipsis.pipe';
-import { ToastService } from '../../../../services/toast.service';
+import { Store } from '@ngrx/store';
+import { cardActions } from '../../../../store/card/actions';
 
 @Component({
   selector: 'app-card',
@@ -41,9 +41,8 @@ export class CardComponent {
   availableLists$: Observable<List[]>;
 
   constructor(
-    private cardService: CardService,
+    private store: Store,
     private listService: ListService,
-    private toastService: ToastService,
     private router: Router,
     private activatedRoute: ActivatedRoute,
   ) {
@@ -52,28 +51,24 @@ export class CardComponent {
   }
 
   onMoveToClick(selectedId: number): void {
-    this.cardService
-      .updateCard(this.card.id, {
-        ...this.card,
-        listId: selectedId,
-      }, this.boardId)
-      .subscribe({
-        next: () => this.toastService.addToast('Card moved!', 'Success'),
-        error: () =>
-          this.toastService.addToast('Failed to move the card', 'Error'),
-      });
+    this.store.dispatch(
+      cardActions.update({
+        card: {
+          ...this.card,
+          listId: selectedId,
+        },
+      }),
+    );
   }
 
   onEditClick(): void {
-    this.router.navigate(['cards', this.card.id, 'edit'], { relativeTo: this.activatedRoute });
+    this.router.navigate(['cards', this.card.id, 'edit'], {
+      relativeTo: this.activatedRoute,
+    });
   }
 
   onDeleteClick(): void {
-    this.cardService.deleteCard(this.card.id, this.boardId).subscribe({
-      next: () => this.toastService.addToast('Card deleted!', 'Success'),
-      error: () =>
-        this.toastService.addToast('Failed to delete the card', 'Error'),
-    });
+    this.store.dispatch(cardActions.delete({ id: this.card.id }))
   }
 
   getPriorityiClasses() {

@@ -12,11 +12,9 @@ export const loadBoards = createEffect(
     actions$.pipe(
       ofType(boardActions.loadAll),
       switchMap(() =>
-        boardService.getAllBoards().pipe(
-          map((boards) => {
-            return boardActions.loadAllSuccess({ boards });
-          }),
-        ),
+        boardService
+          .getAllBoards()
+          .pipe(map((boards) => boardActions.loadAllSuccess({ boards }))),
       ),
     ),
   { functional: true },
@@ -65,7 +63,7 @@ export const updateBoard = createEffect(
       ofType(boardActions.update),
       switchMap((action) =>
         boardService
-          .updateBoard(action.board.id, { ...action.board })
+          .updateBoard(action.board)
           .pipe(
             map(() =>
               boardActions.updateSuccess({ board: { ...action.board } }),

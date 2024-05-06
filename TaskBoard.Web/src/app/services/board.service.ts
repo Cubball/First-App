@@ -5,6 +5,7 @@ import { BoardWithLists } from '../types/shared/board-with-lists';
 import { Observable, map } from 'rxjs';
 import { Board } from '../types/shared/board';
 import { CreateBoard } from '../types/requests/create-board';
+import { UpdateBoard } from '../types/requests/update-board';
 
 @Injectable({
   providedIn: 'root',
@@ -28,8 +29,8 @@ export class BoardService {
     return this.httpClient.post<Board>(this.boardsEndpoint, board);
   }
 
-  updateBoard(id: number, board: CreateBoard): Observable<void> {
-    return this.httpClient.put<void>(`${this.boardsEndpoint}/${id}`, board);
+  updateBoard(board: UpdateBoard): Observable<void> {
+    return this.httpClient.put<void>(`${this.boardsEndpoint}/${board.id}`, board);
   }
 
   deleteBoard(id: number): Observable<void> {

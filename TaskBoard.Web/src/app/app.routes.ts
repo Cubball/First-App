@@ -10,6 +10,7 @@ import {
   currentBoardFeatureKey,
   currentBoardReducer,
 } from './store/current-board/reducers';
+import { cardFeatureKey, cardReducer } from './store/card/reducers';
 
 export const routes: Routes = [
   {
@@ -23,7 +24,10 @@ export const routes: Routes = [
   {
     path: 'boards/:boardId',
     component: TaskBoardComponent,
-    providers: [provideState(currentBoardFeatureKey, currentBoardReducer)],
+    providers: [
+      provideState(currentBoardFeatureKey, currentBoardReducer),
+      provideState(cardFeatureKey, cardReducer),
+    ],
     children: [
       {
         path: 'cards/new/:listId',

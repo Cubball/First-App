@@ -9,7 +9,8 @@ import { provideStoreDevtools } from '@ngrx/store-devtools';
 import { routes } from './app.routes';
 import { boardsFeatureKey, boardsReducer } from './store/boards/reducers';
 import * as boardsEffects from './store/boards/effects';
-import * as currentBoardEffects from './store/current-board/effects'
+import * as currentBoardEffects from './store/current-board/effects';
+import * as cardEffects from './store/card/effects';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -18,10 +19,10 @@ export const appConfig: ApplicationConfig = {
     provideAnimations(),
     provideStore(),
     provideState(boardsFeatureKey, boardsReducer),
-    provideEffects(boardsEffects, currentBoardEffects),
+    provideEffects(boardsEffects, currentBoardEffects, cardEffects),
     provideStoreDevtools({
       maxAge: 25,
       logOnly: !isDevMode(),
-    })
+    }),
   ],
 };

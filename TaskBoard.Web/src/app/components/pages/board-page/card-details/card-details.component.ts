@@ -10,7 +10,6 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { faPenToSquare, faCalendar } from '@fortawesome/free-regular-svg-icons';
 import { ActivatedRoute, RouterLink } from '@angular/router';
-import { CardService } from '../../../../services/card.service';
 import { Card } from '../../../../types/shared/card';
 import { Observable } from 'rxjs';
 import { CommonModule } from '@angular/common';
@@ -20,7 +19,9 @@ import { HistoryService } from '../../../../services/history.service';
 import { CardChange } from '../../../../types/shared/card-change';
 import { CardChangeComponent } from '../../../shared/card-change/card-change.component';
 import { CardChangesFormatterService } from '../../../../services/card-changes-formatter.service';
-import { ToastService } from '../../../../services/toast.service';
+import { Store } from '@ngrx/store';
+import { selectCardState } from '../../../../store/card/reducers';
+import { cardActions } from '../../../../store/card/actions';
 
 @Component({
   selector: 'app-card-details',
@@ -50,10 +51,9 @@ export class CardDetailsComponent {
   lists$: Observable<List[]>;
 
   constructor(
-    private cardService: CardService,
+    private store: Store,
     private listService: ListService,
     private historyService: HistoryService,
-    private toastService: ToastService,
     public cardChangesFormatter: CardChangesFormatterService,
     private activatedRoute: ActivatedRoute,
   ) {
@@ -61,9 +61,8 @@ export class CardDetailsComponent {
     this.boardId = this.activatedRoute.snapshot.parent?.params['boardId'];
     this.lists$ = this.listService.getAllLists(this.boardId);
     this.changes$ = this.historyService.getAllChangesForCard(cardId);
-    this.cardService
-      .getCardById(cardId)
-      .subscribe((card) => (this.card = card));
+    this.store.dispatch(cardActions.load({ id: cardId }));
+    this.store.select(selectCardState).subscribe((card) => (this.card = card));
   }
 
   listTrackBy(_: number, list: List) {
@@ -79,20 +78,13 @@ export class CardDetailsComponent {
       return;
     }
 
-    this.cardService
-      .updateCard(this.card.id, {
-        ...this.card,
-        listId: Number(listId),
-      }, this.boardId)
-      .subscribe({
-        next: () => {
-          this.toastService.addToast('Card moved!', 'Success');
-          this.changes$ = this.historyService.getAllChangesForCard(
-            this.card!.id,
-          );
+    this.store.dispatch(
+      cardActions.update({
+        card: {
+          ...this.card,
+          listId: Number(listId),
         },
-        error: () =>
-          this.toastService.addToast('Failed to move the card', 'Error'),
-      });
+      }),
+    );
   }
 }
