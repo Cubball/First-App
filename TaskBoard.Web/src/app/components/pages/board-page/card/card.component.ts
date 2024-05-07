@@ -9,13 +9,13 @@ import {
 import { faCalendar } from '@fortawesome/free-regular-svg-icons';
 import { CommonModule } from '@angular/common';
 import { EditDeleteMenuComponent } from '../../../shared/edit-delete-menu/edit-delete-menu.component';
-import { ListService } from '../../../../services/list.service';
 import { List } from '../../../../types/shared/list';
 import { Observable } from 'rxjs';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { EllipsisPipe } from '../../../../pipes/ellipsis.pipe';
 import { Store } from '@ngrx/store';
 import { cardActions } from '../../../../store/card/actions';
+import { selectLists } from '../../../../store/current-board/reducers';
 
 @Component({
   selector: 'app-card',
@@ -30,8 +30,6 @@ import { cardActions } from '../../../../store/card/actions';
   templateUrl: './card.component.html',
 })
 export class CardComponent {
-  private boardId: number;
-
   faEllipsisVertical = faEllipsisVertical;
   faCalendar = faCalendar;
   faChevronDown = faChevronDown;
@@ -42,12 +40,10 @@ export class CardComponent {
 
   constructor(
     private store: Store,
-    private listService: ListService,
     private router: Router,
     private activatedRoute: ActivatedRoute,
   ) {
-    this.boardId = this.activatedRoute.snapshot.params['boardId'];
-    this.availableLists$ = this.listService.getAllLists(this.boardId);
+    this.availableLists$ = this.store.select(selectLists);
   }
 
   onMoveToClick(selectedId: number): void {

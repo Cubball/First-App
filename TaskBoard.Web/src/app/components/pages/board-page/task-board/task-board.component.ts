@@ -17,7 +17,6 @@ import {
   RouterOutlet,
 } from '@angular/router';
 import { EditDeleteMenuComponent } from '../../../shared/edit-delete-menu/edit-delete-menu.component';
-import { ToastService } from '../../../../services/toast.service';
 import { Store } from '@ngrx/store';
 import { selectCurrentBoardState } from '../../../../store/current-board/reducers';
 import { boardActions } from '../../../../store/boards/actions';

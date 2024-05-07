@@ -5,7 +5,7 @@ import { boardActions } from './actions';
 import { map, switchMap, tap } from 'rxjs';
 import { Router } from '@angular/router';
 import { ToastService } from '../../services/toast.service';
-import { createOnFailedEffect } from '../shared/helpers';
+import { createAddToastEffect } from '../shared/helpers';
 
 export const loadBoards = createEffect(
   (actions$ = inject(Actions), boardService = inject(BoardService)) =>
@@ -20,8 +20,9 @@ export const loadBoards = createEffect(
   { functional: true },
 );
 
-export const onLoadBoardsFailed = createOnFailedEffect(
+export const onLoadBoardsFailed = createAddToastEffect(
   'Failed to load the boards',
+  'Error',
   boardActions.loadAllFailed,
 );
 
@@ -52,8 +53,9 @@ export const onAddBoardSuccess = createEffect(
   { functional: true, dispatch: false },
 );
 
-export const onAddBoardFailed = createOnFailedEffect(
+export const onAddBoardFailed = createAddToastEffect(
   'Failed to add the board',
+  'Error',
   boardActions.addFailed,
 );
 
@@ -88,8 +90,9 @@ export const onUpdateBoardSuccess = createEffect(
   { functional: true, dispatch: false },
 );
 
-export const onUpdateBoardFailed = createOnFailedEffect(
+export const onUpdateBoardFailed = createAddToastEffect(
   'Failed to update the board',
+  'Error',
   boardActions.updateFailed,
 );
 
@@ -120,7 +123,8 @@ export const onDeleteBoardSuccess = createEffect(
   { functional: true, dispatch: false },
 );
 
-export const onDeleteBoardFailed = createOnFailedEffect(
+export const onDeleteBoardFailed = createAddToastEffect(
   'Failed to delete the board',
+  'Error',
   boardActions.deleteFailed,
 );

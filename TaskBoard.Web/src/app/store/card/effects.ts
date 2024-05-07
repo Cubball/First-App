@@ -3,7 +3,7 @@ import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { CardService } from '../../services/card.service';
 import { cardActions } from './actions';
 import { map, switchMap, tap } from 'rxjs';
-import { createOnFailedEffect } from '../shared/helpers';
+import { createAddToastEffect } from '../shared/helpers';
 import { ToastService } from '../../services/toast.service';
 
 export const loadCard = createEffect(
@@ -19,8 +19,9 @@ export const loadCard = createEffect(
   { functional: true },
 );
 
-export const onLoadCardFailed = createOnFailedEffect(
+export const onLoadCardFailed = createAddToastEffect(
   'Failed to load the card',
+  'Error',
   cardActions.loadFailed,
 );
 
@@ -37,17 +38,15 @@ export const addCard = createEffect(
   { functional: true },
 );
 
-export const onAddCardSuccess = createEffect(
-  (actions$ = inject(Actions), toastService = inject(ToastService)) =>
-    actions$.pipe(
-      ofType(cardActions.addSuccess),
-      tap(() => toastService.addToast('Card added!', 'Success')),
-    ),
-  { functional: true, dispatch: false },
+export const onAddCardSuccess = createAddToastEffect(
+  'Card added!',
+  'Success',
+  cardActions.addSuccess,
 );
 
-export const onAddCardFailed = createOnFailedEffect(
+export const onAddCardFailed = createAddToastEffect(
   'Failed to add the card',
+  'Error',
   cardActions.addFailed,
 );
 
@@ -68,17 +67,15 @@ export const updateCard = createEffect(
   { functional: true },
 );
 
-export const onUpdateCardSuccess = createEffect(
-  (actions$ = inject(Actions), toastService = inject(ToastService)) =>
-    actions$.pipe(
-      ofType(cardActions.updateSuccess),
-      tap(() => toastService.addToast('Card updated!', 'Success')),
-    ),
-  { functional: true, dispatch: false },
+export const onUpdateCardSuccess = createAddToastEffect(
+  'Card updated!',
+  'Success',
+  cardActions.updateSuccess,
 );
 
-export const onUpdateCardFailed = createOnFailedEffect(
+export const onUpdateCardFailed = createAddToastEffect(
   'Failed to update the card',
+  'Error',
   cardActions.updateFailed,
 );
 
@@ -99,16 +96,14 @@ export const deleteCard = createEffect(
   { functional: true },
 );
 
-export const onDeleteCardSuccess = createEffect(
-  (actions$ = inject(Actions), toastService = inject(ToastService)) =>
-    actions$.pipe(
-      ofType(cardActions.deleteSuccess),
-      tap(() => toastService.addToast('Card deleted!', 'Success')),
-    ),
-  { functional: true, dispatch: false },
+export const onDeleteCardSuccess = createAddToastEffect(
+  'Card deleted!',
+  'Success',
+  cardActions.deleteSuccess,
 );
 
-export const onDeleteCardFailed = createOnFailedEffect(
+export const onDeleteCardFailed = createAddToastEffect(
   'Failed to delete the card',
+  'Error',
   cardActions.deleteFailed,
 );

@@ -21,7 +21,6 @@ import {
 import { CommonModule } from '@angular/common';
 import { Observable } from 'rxjs';
 import { List } from '../../../../types/shared/list';
-import { ListService } from '../../../../services/list.service';
 import { FormButtonComponent } from '../../../shared/form-button/form-button.component';
 import { ToastService } from '../../../../services/toast.service';
 import { Card } from '../../../../types/shared/card';
@@ -30,6 +29,7 @@ import { UpdateCard } from '../../../../types/requests/update-card';
 import { Store } from '@ngrx/store';
 import { cardActions } from '../../../../store/card/actions';
 import { selectCardState } from '../../../../store/card/reducers';
+import { selectLists } from '../../../../store/current-board/reducers';
 
 @Component({
   selector: 'app-add-edit-card',
@@ -45,7 +45,6 @@ import { selectCardState } from '../../../../store/card/reducers';
 })
 export class AddEditCardComponent {
   private cardId: number;
-  private boardId: number;
 
   faXmark = faXmark;
   faCalendar = faCalendar;
@@ -68,13 +67,11 @@ export class AddEditCardComponent {
 
   constructor(
     private store: Store,
-    private listService: ListService,
     private toastService: ToastService,
     private activatedRoute: ActivatedRoute,
   ) {
-    this.cardId = this.activatedRoute.snapshot.params['id'];
-    this.boardId = this.activatedRoute.snapshot.parent?.params['boardId'];
-    this.lists$ = this.listService.getAllLists(this.boardId);
+    this.cardId = Number(this.activatedRoute.snapshot.params['id']);
+    this.lists$ = this.store.select(selectLists);
     this.initializeForm();
   }
 
@@ -147,7 +144,7 @@ export class AddEditCardComponent {
       name: formGroup.value.name!,
       description: formGroup.value.description!,
       priority: formGroup.value.priority!,
-      listId: formGroup.value.listId!,
+      listId: Number(formGroup.value.listId!),
       dueDate: this.getUTCDateFromLocalDateString(
         formGroup.value.dueDate!,
       ).toISOString(),

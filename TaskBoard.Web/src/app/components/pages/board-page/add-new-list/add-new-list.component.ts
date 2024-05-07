@@ -3,9 +3,9 @@ import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { FormButtonComponent } from '../../../shared/form-button/form-button.component';
-import { ListService } from '../../../../services/list.service';
-import { ToastService } from '../../../../services/toast.service';
 import { ActivatedRoute } from '@angular/router';
+import { Store } from '@ngrx/store';
+import { listActions } from '../../../../store/lists/actions';
 
 @Component({
   selector: 'app-add-new-list',
@@ -14,7 +14,7 @@ import { ActivatedRoute } from '@angular/router';
   templateUrl: './add-new-list.component.html',
 })
 export class AddNewListComponent {
-  private boardId: number;
+  private boardId!: number;
 
   faPlus = faPlus;
 
@@ -22,11 +22,12 @@ export class AddNewListComponent {
   inputControl = new FormControl('');
 
   constructor(
-    private listService: ListService,
-    private toastService: ToastService,
+    private store: Store,
     private activatedRoute: ActivatedRoute,
   ) {
-    this.boardId = this.activatedRoute.snapshot.params['boardId'];
+    this.activatedRoute.params.subscribe(
+      (params) => (this.boardId = params['boardId']),
+    );
   }
 
   onAddNewListClick(): void {
@@ -44,18 +45,13 @@ export class AddNewListComponent {
   }
 
   private addList() {
-    this.listService
-      .addList(
-        {
+    this.store.dispatch(
+      listActions.add({
+        list: {
           name: this.inputControl.value ?? '',
           boardId: this.boardId,
         },
-        this.boardId,
-      )
-      .subscribe({
-        next: () => this.toastService.addToast('List added!', 'Success'),
-        error: () =>
-          this.toastService.addToast('Failed to add the list', 'Error'),
-      });
+      }),
+    );
   }
 }

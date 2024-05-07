@@ -11,6 +11,7 @@ import { boardsFeatureKey, boardsReducer } from './store/boards/reducers';
 import * as boardsEffects from './store/boards/effects';
 import * as currentBoardEffects from './store/current-board/effects';
 import * as cardEffects from './store/card/effects';
+import * as listEffects from './store/lists/effects';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -19,7 +20,12 @@ export const appConfig: ApplicationConfig = {
     provideAnimations(),
     provideStore(),
     provideState(boardsFeatureKey, boardsReducer),
-    provideEffects(boardsEffects, currentBoardEffects, cardEffects),
+    provideEffects(
+      boardsEffects,
+      currentBoardEffects,
+      cardEffects,
+      listEffects,
+    ),
     provideStoreDevtools({
       maxAge: 25,
       logOnly: !isDevMode(),

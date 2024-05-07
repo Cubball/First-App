@@ -13,7 +13,6 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 import { Card } from '../../../../types/shared/card';
 import { Observable } from 'rxjs';
 import { CommonModule } from '@angular/common';
-import { ListService } from '../../../../services/list.service';
 import { List } from '../../../../types/shared/list';
 import { HistoryService } from '../../../../services/history.service';
 import { CardChange } from '../../../../types/shared/card-change';
@@ -22,6 +21,8 @@ import { CardChangesFormatterService } from '../../../../services/card-changes-f
 import { Store } from '@ngrx/store';
 import { selectCardState } from '../../../../store/card/reducers';
 import { cardActions } from '../../../../store/card/actions';
+import { listActions } from '../../../../store/lists/actions';
+import { selectLists } from '../../../../store/current-board/reducers';
 
 @Component({
   selector: 'app-card-details',
@@ -36,8 +37,6 @@ import { cardActions } from '../../../../store/card/actions';
   templateUrl: './card-details.component.html',
 })
 export class CardDetailsComponent {
-  private boardId: number;
-
   faXmark = faXmark;
   faPenToSquare = faPenToSquare;
   faListUl = faListUl;
@@ -52,16 +51,14 @@ export class CardDetailsComponent {
 
   constructor(
     private store: Store,
-    private listService: ListService,
     private historyService: HistoryService,
     public cardChangesFormatter: CardChangesFormatterService,
     private activatedRoute: ActivatedRoute,
   ) {
     const cardId = this.activatedRoute.snapshot.params['id'];
-    this.boardId = this.activatedRoute.snapshot.parent?.params['boardId'];
-    this.lists$ = this.listService.getAllLists(this.boardId);
-    this.changes$ = this.historyService.getAllChangesForCard(cardId);
     this.store.dispatch(cardActions.load({ id: cardId }));
+    this.changes$ = this.historyService.getAllChangesForCard(cardId);
+    this.lists$ = this.store.select(selectLists);
     this.store.select(selectCardState).subscribe((card) => (this.card = card));
   }
 

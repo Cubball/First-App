@@ -22,6 +22,7 @@ public class BoardRepository : Repository<Board>, IBoardRepository
         return DbContext.Boards
             .Include(b => b.Lists)
                 .ThenInclude(l => l.Cards)
+            .AsSplitQuery()
             .FirstOrDefaultAsync(b => b.Id == id);
     }
 }

@@ -81,7 +81,13 @@ public class BoardService : IBoardService
             return Error.NotFound();
         }
 
-        return board.ToModelWithLists();
+        var boardModel = board.ToModelWithLists();
+        foreach (var list in boardModel.Lists)
+        {
+            list.Cards.Sort((a, b) => a.DueDate.CompareTo(b.DueDate));
+        }
+
+        return boardModel;
     }
 
     public async Task<ErrorOr<Updated>> UpdateBoardAsync(UpdateBoardModel boardModel)

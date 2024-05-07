@@ -8,9 +8,9 @@ import { CardInList } from '../../../../types/shared/card-in-list';
 import { EditDeleteMenuComponent } from '../../../shared/edit-delete-menu/edit-delete-menu.component';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { FormButtonComponent } from '../../../shared/form-button/form-button.component';
-import { ListService } from '../../../../services/list.service';
-import { ActivatedRoute, RouterLink } from '@angular/router';
-import { ToastService } from '../../../../services/toast.service';
+import { RouterLink } from '@angular/router';
+import { Store } from '@ngrx/store';
+import { listActions } from '../../../../store/lists/actions';
 
 @Component({
   selector: 'app-list-of-cards',
@@ -27,8 +27,6 @@ import { ToastService } from '../../../../services/toast.service';
   templateUrl: './list-of-cards.component.html',
 })
 export class ListOfCardsComponent {
-  private boardId: number;
-
   faEllipsisVertical = faEllipsisVertical;
   faPlus = faPlus;
 
@@ -36,13 +34,7 @@ export class ListOfCardsComponent {
   editListPopupOpen = false;
   inputControl = new FormControl('');
 
-  constructor(
-    private listService: ListService,
-    private toastService: ToastService,
-    private activatedRoute: ActivatedRoute,
-  ) {
-    this.boardId = this.activatedRoute.snapshot.params['boardId'];
-  }
+  constructor(private store: Store) {}
 
   cardTrackBy(_: number, card: CardInList) {
     return card.id;
@@ -54,11 +46,7 @@ export class ListOfCardsComponent {
   }
 
   onDeleteClick() {
-    this.listService.deleteList(this.list.id, this.boardId).subscribe({
-      next: () => this.toastService.addToast('List deleted!', 'Success'),
-      error: () =>
-        this.toastService.addToast('Failed to delete the list', 'Error'),
-    });
+    this.store.dispatch(listActions.delete({ id: this.list.id }));
   }
 
   onSaveClick(): void {
@@ -71,18 +59,13 @@ export class ListOfCardsComponent {
   }
 
   private editList() {
-    this.listService
-      .updateList(
-        this.list.id,
-        {
+    this.store.dispatch(
+      listActions.update({
+        list: {
+          id: this.list.id,
           name: this.inputControl.value ?? '',
         },
-        this.boardId,
-      )
-      .subscribe({
-        next: () => this.toastService.addToast('List updated!', 'Success'),
-        error: () =>
-          this.toastService.addToast('Failed to update the list', 'Error'),
-      });
+      }),
+    );
   }
 }
