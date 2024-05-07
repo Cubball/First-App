@@ -2,7 +2,7 @@ import { inject } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { HistoryService } from '../../services/history.service';
 import { cardChangesActions } from './actions';
-import { map, switchMap } from 'rxjs';
+import { catchError, map, of, switchMap } from 'rxjs';
 import { createAddToastEffect } from '../shared/helpers';
 
 export const loadCardChanges = createEffect(
@@ -10,9 +10,10 @@ export const loadCardChanges = createEffect(
     actions$.pipe(
       ofType(cardChangesActions.load),
       switchMap((action) =>
-        historyService
-          .getAllChangesForCard(action.cardId)
-          .pipe(map((changes) => cardChangesActions.loadSuccess({ changes }))),
+        historyService.getAllChangesForCard(action.cardId).pipe(
+          map((changes) => cardChangesActions.loadSuccess({ changes })),
+          catchError(() => of(cardChangesActions.loadFailed())),
+        ),
       ),
     ),
   { functional: true },

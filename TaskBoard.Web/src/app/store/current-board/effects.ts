@@ -3,7 +3,7 @@ import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { BoardService } from '../../services/board.service';
 import { currentBoardActions } from './actions';
 import { createAddToastEffect } from '../shared/helpers';
-import { switchMap, map } from 'rxjs';
+import { switchMap, map, catchError, of } from 'rxjs';
 
 export const loadBoard = createEffect(
   (actions$ = inject(Actions), boardService = inject(BoardService)) =>
@@ -14,6 +14,7 @@ export const loadBoard = createEffect(
           map((board) => {
             return currentBoardActions.loadSuccess({ board });
           }),
+          catchError(() => of(currentBoardActions.loadFailed())),
         ),
       ),
     ),

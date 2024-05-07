@@ -2,7 +2,7 @@ import { inject } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { CardService } from '../../services/card.service';
 import { cardActions } from './actions';
-import { map, of, switchMap } from 'rxjs';
+import { catchError, map, of, switchMap } from 'rxjs';
 import { createAddToastEffect } from '../shared/helpers';
 import { cardChangesActions } from '../card-changes/actions';
 
@@ -11,9 +11,10 @@ export const loadCard = createEffect(
     actions$.pipe(
       ofType(cardActions.load),
       switchMap((action) =>
-        cardService
-          .getCardById(action.id)
-          .pipe(map((card) => cardActions.loadSuccess({ card }))),
+        cardService.getCardById(action.id).pipe(
+          map((card) => cardActions.loadSuccess({ card })),
+          catchError(() => of(cardActions.loadFailed())),
+        ),
       ),
     ),
   { functional: true },
@@ -30,9 +31,11 @@ export const addCard = createEffect(
     actions$.pipe(
       ofType(cardActions.add),
       switchMap((action) =>
-        cardService
-          .addCard(action.card)
-          .pipe(map((card) => cardActions.addSuccess({ card }))),
+        cardService.addCard(action.card).pipe(
+          map((card) => cardActions.addSuccess({ card })),
+
+          catchError(() => of(cardActions.addFailed())),
+        ),
       ),
     ),
   { functional: true },
@@ -61,6 +64,7 @@ export const updateCard = createEffect(
               card: { ...action.card, listName: '' },
             }),
           ),
+          catchError(() => of(cardActions.updateFailed())),
         ),
       ),
     ),
@@ -101,6 +105,7 @@ export const deleteCard = createEffect(
               id: action.id,
             }),
           ),
+          catchError(() => of(cardActions.deleteFailed())),
         ),
       ),
     ),

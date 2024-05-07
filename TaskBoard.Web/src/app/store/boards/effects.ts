@@ -2,7 +2,7 @@ import { inject } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { BoardService } from '../../services/board.service';
 import { boardActions } from './actions';
-import { map, switchMap, tap } from 'rxjs';
+import { catchError, map, of, switchMap, tap } from 'rxjs';
 import { Router } from '@angular/router';
 import { ToastService } from '../../services/toast.service';
 import { createAddToastEffect } from '../shared/helpers';
@@ -12,9 +12,10 @@ export const loadBoards = createEffect(
     actions$.pipe(
       ofType(boardActions.loadAll),
       switchMap(() =>
-        boardService
-          .getAllBoards()
-          .pipe(map((boards) => boardActions.loadAllSuccess({ boards }))),
+        boardService.getAllBoards().pipe(
+          map((boards) => boardActions.loadAllSuccess({ boards })),
+          catchError(() => of(boardActions.loadAllFailed())),
+        ),
       ),
     ),
   { functional: true },
@@ -31,9 +32,10 @@ export const addBoard = createEffect(
     actions$.pipe(
       ofType(boardActions.add),
       switchMap((action) =>
-        boardService
-          .addBoard(action.board)
-          .pipe(map((board) => boardActions.addSuccess({ board }))),
+        boardService.addBoard(action.board).pipe(
+          map((board) => boardActions.addSuccess({ board })),
+          catchError(() => of(boardActions.addFailed())),
+        ),
       ),
     ),
   { functional: true },
@@ -64,13 +66,11 @@ export const updateBoard = createEffect(
     actions$.pipe(
       ofType(boardActions.update),
       switchMap((action) =>
-        boardService
-          .updateBoard(action.board)
-          .pipe(
-            map(() =>
-              boardActions.updateSuccess({ board: { ...action.board } }),
-            ),
-          ),
+        boardService.updateBoard(action.board).pipe(
+          map(() => boardActions.updateSuccess({ board: { ...action.board } })),
+
+          catchError(() => of(boardActions.updateFailed())),
+        ),
       ),
     ),
   { functional: true },
@@ -101,9 +101,10 @@ export const deleteBoard = createEffect(
     actions$.pipe(
       ofType(boardActions.delete),
       switchMap((action) =>
-        boardService
-          .deleteBoard(action.id)
-          .pipe(map(() => boardActions.deleteSuccess({ id: action.id }))),
+        boardService.deleteBoard(action.id).pipe(
+          map(() => boardActions.deleteSuccess({ id: action.id })),
+          catchError(() => of(boardActions.deleteFailed())),
+        ),
       ),
     ),
   { functional: true },

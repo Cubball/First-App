@@ -14,14 +14,12 @@ import { Card } from '../../../../types/shared/card';
 import { Observable } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { List } from '../../../../types/shared/list';
-import { HistoryService } from '../../../../services/history.service';
 import { CardChange } from '../../../../types/shared/card-change';
 import { CardChangeComponent } from '../../../shared/card-change/card-change.component';
 import { CardChangesFormatterService } from '../../../../services/card-changes-formatter.service';
 import { Store } from '@ngrx/store';
 import { selectCardState } from '../../../../store/card/reducers';
 import { cardActions } from '../../../../store/card/actions';
-import { listActions } from '../../../../store/lists/actions';
 import { selectLists } from '../../../../store/current-board/reducers';
 import { cardChangesActions } from '../../../../store/card-changes/actions';
 import { selectCardChangesState } from '../../../../store/card-changes/reducers';
@@ -56,7 +54,7 @@ export class CardDetailsComponent {
     public cardChangesFormatter: CardChangesFormatterService,
     private activatedRoute: ActivatedRoute,
   ) {
-    const cardId = this.activatedRoute.snapshot.params['id'];
+    const cardId = Number(this.activatedRoute.snapshot.params['id']);
     this.store.dispatch(cardActions.load({ id: cardId }));
     this.store.dispatch(cardChangesActions.load({ cardId }));
     this.changes$ = this.store.select(selectCardChangesState)

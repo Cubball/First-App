@@ -15,7 +15,10 @@ import {
   cardChangesFeatureKey,
   cardChangesReducer,
 } from './store/card-changes/reducers';
-import { boardChangesFeatureKey, boardChangesReducer } from './store/board-changes/reducers';
+import {
+  boardChangesFeatureKey,
+  boardChangesReducer,
+} from './store/board-changes/reducers';
 
 export const routes: Routes = [
   {
