@@ -4,7 +4,7 @@ services:
     container_name: web
     build:
       context: .
-      dockerfile: ./TaskBoard.Web/Dockerfile
+      dockerfile: ./src/TaskBoard.Web/Dockerfile
     ports:
       - 5000:80
     depends_on:
@@ -14,7 +14,7 @@ services:
     container_name: api
     build:
       context: .
-      dockerfile: ./TaskBoard.API/Dockerfile
+      dockerfile: ./src/TaskBoard.API/Dockerfile
     ports:
       - 5001:5001
     environment:

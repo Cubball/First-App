@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaskBoard.DAL", "TaskBoard.DAL\TaskBoard.DAL.csproj", "{8CD562C0-7F54-49FB-84C6-410797090A1D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaskBoard.DAL", "src\TaskBoard.DAL\TaskBoard.DAL.csproj", "{8CD562C0-7F54-49FB-84C6-410797090A1D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaskBoard.BLL", "TaskBoard.BLL\TaskBoard.BLL.csproj", "{FF052E22-792F-4A9A-901D-D3F05C245EE0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaskBoard.BLL", "src\TaskBoard.BLL\TaskBoard.BLL.csproj", "{FF052E22-792F-4A9A-901D-D3F05C245EE0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaskBoard.API", "TaskBoard.API\TaskBoard.API.csproj", "{402FA6B6-16B0-414E-9913-CFC57AF34AC2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaskBoard.API", "src\TaskBoard.API\TaskBoard.API.csproj", "{402FA6B6-16B0-414E-9913-CFC57AF34AC2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
