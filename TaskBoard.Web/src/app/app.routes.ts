@@ -11,6 +11,11 @@ import {
   currentBoardReducer,
 } from './store/current-board/reducers';
 import { cardFeatureKey, cardReducer } from './store/card/reducers';
+import {
+  cardChangesFeatureKey,
+  cardChangesReducer,
+} from './store/card-changes/reducers';
+import { boardChangesFeatureKey, boardChangesReducer } from './store/board-changes/reducers';
 
 export const routes: Routes = [
   {
@@ -40,10 +45,12 @@ export const routes: Routes = [
       {
         path: 'cards/:id',
         component: CardDetailsComponent,
+        providers: [provideState(cardChangesFeatureKey, cardChangesReducer)],
       },
       {
         path: 'history',
         component: HistorySidebarComponent,
+        providers: [provideState(boardChangesFeatureKey, boardChangesReducer)],
       },
     ],
   },

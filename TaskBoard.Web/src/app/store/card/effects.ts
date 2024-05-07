@@ -2,9 +2,9 @@ import { inject } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { CardService } from '../../services/card.service';
 import { cardActions } from './actions';
-import { map, switchMap, tap } from 'rxjs';
+import { map, of, switchMap } from 'rxjs';
 import { createAddToastEffect } from '../shared/helpers';
-import { ToastService } from '../../services/toast.service';
+import { cardChangesActions } from '../card-changes/actions';
 
 export const loadCard = createEffect(
   (actions$ = inject(Actions), cardService = inject(CardService)) =>
@@ -62,6 +62,17 @@ export const updateCard = createEffect(
             }),
           ),
         ),
+      ),
+    ),
+  { functional: true },
+);
+
+export const onUpdateCardSuccessLoadChanges = createEffect(
+  (actions$ = inject(Actions)) =>
+    actions$.pipe(
+      ofType(cardActions.updateSuccess),
+      switchMap((action) =>
+        of(cardChangesActions.load({ cardId: action.card.id })),
       ),
     ),
   { functional: true },

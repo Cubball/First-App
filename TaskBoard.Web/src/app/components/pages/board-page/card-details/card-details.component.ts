@@ -23,6 +23,8 @@ import { selectCardState } from '../../../../store/card/reducers';
 import { cardActions } from '../../../../store/card/actions';
 import { listActions } from '../../../../store/lists/actions';
 import { selectLists } from '../../../../store/current-board/reducers';
+import { cardChangesActions } from '../../../../store/card-changes/actions';
+import { selectCardChangesState } from '../../../../store/card-changes/reducers';
 
 @Component({
   selector: 'app-card-details',
@@ -51,13 +53,13 @@ export class CardDetailsComponent {
 
   constructor(
     private store: Store,
-    private historyService: HistoryService,
     public cardChangesFormatter: CardChangesFormatterService,
     private activatedRoute: ActivatedRoute,
   ) {
     const cardId = this.activatedRoute.snapshot.params['id'];
     this.store.dispatch(cardActions.load({ id: cardId }));
-    this.changes$ = this.historyService.getAllChangesForCard(cardId);
+    this.store.dispatch(cardChangesActions.load({ cardId }));
+    this.changes$ = this.store.select(selectCardChangesState)
     this.lists$ = this.store.select(selectLists);
     this.store.select(selectCardState).subscribe((card) => (this.card = card));
   }
