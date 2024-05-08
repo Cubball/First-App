@@ -58,3 +58,5 @@ app.MapListEndpoints();
 app.MapBoardEndpoints();
 
 app.Run();
+
+public partial class Program { }
