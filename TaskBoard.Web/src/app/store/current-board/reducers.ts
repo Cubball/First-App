@@ -41,6 +41,7 @@ const currentBoardFeature = createFeature({
   name: 'currentBoard',
   reducer: createReducer(
     initialState,
+    on(currentBoardActions.load, () => null!),
     on(currentBoardActions.loadSuccess, (_, { board }) => board),
     on(cardActions.addSuccess, (state, { card }) => ({
       ...state,

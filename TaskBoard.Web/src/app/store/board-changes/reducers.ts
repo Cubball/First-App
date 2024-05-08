@@ -13,6 +13,9 @@ const boardChangesFeature = createFeature({
   name: 'boardChanges',
   reducer: createReducer(
     initalState,
+    on(boardChangesActions.loadMore, (state, { page }) =>
+      page === 1 ? initalState : state,
+    ),
     on(boardChangesActions.loadMoreSuccess, (state, { changes }) => ({
       ...changes,
       items:

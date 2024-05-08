@@ -8,6 +8,7 @@ const cardChangesFeature = createFeature({
   name: 'cardChanges',
   reducer: createReducer(
     initialState,
+    on(cardChangesActions.load, () => null!),
     on(cardChangesActions.loadSuccess, (_, { changes }) => changes),
   ),
 });

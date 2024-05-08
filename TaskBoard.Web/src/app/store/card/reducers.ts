@@ -8,6 +8,7 @@ export const cardFeature = createFeature({
   name: 'card',
   reducer: createReducer(
     initialState,
+    on(cardActions.load, () => null!),
     on(cardActions.loadSuccess, (_, { card }) => card),
     on(cardActions.updateSuccess, (_, { card }) => card),
   ),
