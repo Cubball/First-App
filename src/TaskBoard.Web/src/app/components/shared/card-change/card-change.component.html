@@ -43,9 +43,11 @@
           @case ("CardMoved") {
             <span>
               moved
-              <app-card-name
-                [text]="cardChangeItem.name ?? 'it'"
-              ></app-card-name>
+              @if (cardChangeItem.name) {
+                <app-card-name [text]="cardChangeItem.name"></app-card-name>
+              } @else {
+                it
+              }
               from <span class="font-medium">{{ cardChangeItem.from }}</span> to
               <span class="font-medium">{{ cardChangeItem.to }}</span></span
             >
