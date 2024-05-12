@@ -33,14 +33,14 @@ To run locally, make sure you have installed:
 - Angular CLI
 - PostgreSQL
 1. Repeat steps 1-3 from [using docker-compose section](#using-docker-compose)
-2. Replace the "DefaultConneciton" entry in [TaskBoard.API/appsettings.Development.json](TaskBoard.API/appsettings.Development.json#L9) with your own connection string to the PostreSQL database.
+2. Replace the "DefaultConneciton" entry in [TaskBoard.API/appsettings.Development.json](TaskBoard.API/appsettings.Development.json#L9) with your own connection string to the PostgreSQL database.
 3. Run the API
 ```
-dotnet run --project ./TaskBoard.API/
+dotnet run --project ./src/TaskBoard.API/
 ```
 4. In a new terminal, go to the TaskBoard.Web folder
 ```
-cd ./TaskBoard.Web/
+cd ./src/TaskBoard.Web/
 ```
 5. Install all of the dependencies
 ```
@@ -53,3 +53,19 @@ ng serve
 After that, you should have:
 - Angular application running on port 4200 (http)
 - ASP .NET Core API running on port 5047 (http)
+
+### Running tests
+The project contains unit and integration tests. Integration tests spin up docker containers for PostgreSQL database, so make sure you have docker running when running integration tests.
+- To run all tests:
+  ```
+  dotnet test
+  ```
+- To run just unit tests:
+  ```
+  dotnet test --filter FullyQualifiedName~Unit
+  ```
+
+- To run just integration tests:
+  ```
+  dotnet test --filter FullyQualifiedName~Integration
+  ```

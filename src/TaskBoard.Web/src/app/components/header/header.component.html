@@ -1,0 +1,26 @@
+<header class="flex justify-between pb-3">
+  <h1 class="text-2xl font-bold md:text-4xl">
+    <button class="peer">
+      Boards
+      <fa-icon [icon]="faChevronDown" class="ml-1"></fa-icon>
+    </button>
+    <div
+      class="absolute z-10 hidden w-fit translate-y-1 overflow-hidden rounded-md border border-gray-300 bg-white text-lg active:block peer-focus:block"
+    >
+      <button
+        *ngFor="let board of boards$ | async; trackBy: boardTrackBy"
+        class="block w-full px-3 py-1.5 text-left hover:bg-gray-100"
+        routerLink="/boards/{{ board.id }}"
+      >
+        {{ board.name }}
+      </button>
+    </div>
+  </h1>
+  <button
+    class="text-md h-fit rounded-md border border-gray-300 px-2 py-1 font-medium md:px-4 md:py-2 md:text-xl"
+    routerLink="/boards/new"
+  >
+    <fa-icon [icon]="faPlus" class="mr-1"></fa-icon>
+    Add new board
+  </button>
+</header>

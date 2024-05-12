@@ -1,0 +1,26 @@
+<div class="flex max-w-md grow flex-col gap-3">
+  <input
+    type="text"
+    minlength="2"
+    maxlength="100"
+    placeholder="Enter board name..."
+    class="rounded-md border border-gray-400 bg-gray-100 p-2"
+    [formControl]="inputControl"
+  />
+  <div class="flex justify-between gap-2">
+    <app-form-button
+      [text]="boardId ? 'Save board' : 'Add board'"
+      class="grow"
+      [style]="'Primary'"
+      (buttonClick)="onSaveClick()"
+    >
+    </app-form-button>
+    <app-form-button
+      text="Cancel"
+      class="grow"
+      [style]="'Secondary'"
+      (buttonClick)="onCancelClick()"
+    >
+    </app-form-button>
+  </div>
+</div>

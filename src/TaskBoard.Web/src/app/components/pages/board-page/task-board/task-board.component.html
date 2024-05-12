@@ -1,0 +1,32 @@
+<ng-container *ngIf="board$ | async as board">
+  <hr class="mb-3" />
+  <div class="flex justify-between pb-3">
+    <h2 class="relative text-xl font-bold md:text-3xl">
+      {{ board.name }}
+      <button class="peer">
+        <fa-icon [icon]="faEllipsisVertical" class="mx-3"></fa-icon>
+      </button>
+      <app-edit-delete-menu
+        class="top-15 absolute right-0 z-10 hidden text-sm active:block peer-focus:block md:text-base"
+        (editClick)="onEditClick()"
+        (deleteClick)="onDeleteClick()"
+      ></app-edit-delete-menu>
+    </h2>
+    <button
+      class="h-fit rounded-md border border-gray-300 px-2 py-1 text-sm font-medium md:px-4 md:py-2 md:text-lg"
+      routerLink="history"
+    >
+      <fa-icon [icon]="faArrowRotateLeft" class="mr-1"></fa-icon>
+      History
+    </button>
+  </div>
+  <div class="flex min-h-0 justify-start gap-5 overflow-x-auto">
+    <app-list-of-cards
+      *ngFor="let list of board.lists; trackBy: listTrackBy"
+      [list]="list"
+      class="flex min-w-64 max-w-md grow basis-1"
+    ></app-list-of-cards>
+    <app-add-new-list class="min-w-64 max-w-md grow basis-1"></app-add-new-list>
+  </div>
+  <router-outlet></router-outlet>
+</ng-container>
